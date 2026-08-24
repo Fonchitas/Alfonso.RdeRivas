@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Works — Alfonso R. de Rivas</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <a href="works.html" class="is-active">Works</a>
+      <a href="archive.html">Archive</a>
+      <a href="sound.html">Sound</a>
+      <a href="info.html">Info</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+  <div class="page-fade">
+  <main class="rows">
+    <div class="works-grid">
+      <a class="card" href="simbiosis.html">
+        <div class="card__img"><img src="img/simbiosis-works.jpg" alt="" loading="lazy" /></div>
+        <p class="card__caption">Simbiosis, <em>Cultural mediation</em></p>
+        <span class="card__cats">Branding · 3D · Music · Web</span>
+      </a>
+      <a class="card" href="proyecto-04.html">
+        <div class="card__img"><video src="https://ik.imagekit.io/k0qx6odcz/Rodri%CC%81guez-Alfonso-Project_VIDEO-03-3DAnimation-2025.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+        <p class="card__caption">Primal, <em>New Balance</em></p>
+        <span class="card__cats">3D · Motion</span>
+      </a>
+      <a class="card" href="proyecto-05.html">
+        <div class="card__img"><img src="img/lca-works.jpg" alt="" loading="lazy" /></div>
+        <p class="card__caption">La Casa Amarilla Estudio, <em>Madrid</em></p>
+        <span class="card__cats">Art Direction · Photography · Branding</span>
+      </a>
+      <a class="card" href="proyecto-laus.html">
+        <div class="card__img"><video src="https://ik.imagekit.io/k0qx6odcz/OUTPACED%20CASE%20STUDY.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+        <p class="card__caption">Outpaced, <em>D&amp;AD 2026</em></p>
+        <span class="card__cats">Web Design · Motion · Campaign</span>
+      </a>
+      <a class="card" href="proyecto-anfaco.html">
+        <div class="card__img"><img src="https://ik.imagekit.io/k0qx6odcz/A1_75972-Portada-WEB.jpg" alt="" loading="lazy" /></div>
+        <p class="card__caption">Specimen, <em>Laus Inbook 2026</em></p>
+        <span class="card__cats">Editorial</span>
+      </a>
+      <a class="card" href="proyecto-06.html">
+        <div class="card__img"><img src="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png" alt="" loading="lazy" /></div>
+        <p class="card__caption">Todo Encaja, <em>ANFACO Award 2026</em></p>
+        <span class="card__cats">Packaging</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div>
+      Alfonso Rodríguez de Rivas —<br />
+      Multimedia &amp; Graphic Designer<br />
+      Based in Madrid, Spain
+    </div>
+    <div>
+      +34 620 139 947<br />
+      <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+      <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer__col--right">
+      ©Alfonso R. de Rivas, 2026<br />
+      Web designed and coded by me.
+      Typefaces: Diatype by Dinamo and Herbik by Daniel Veneklaas.
+    </div>
+  </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

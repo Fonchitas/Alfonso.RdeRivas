@@ -1,0 +1,1191 @@
+/* ============================================================
+   PORTFOLIO — ALFONSO R. DE RIVAS
+   ============================================================ */
+
+/* ---------- Fuentes ---------- */
+@font-face {
+  font-family: 'Diatype';
+  src: url('../fonts/Diatype-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Diatype';
+  src: url('../fonts/Diatype-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Herbik';
+  src: url('../fonts/Herbik-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Herbik';
+  src: url('../fonts/Herbik-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --ink: #131313;
+  --ph: #d9d9d9;
+  --ph-dark: #c7c7c2;
+  --line: #131313;
+
+  --sans: 'Diatype', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'Herbik', Georgia, serif;
+
+  --fs-serif: 16px;
+  --fs-nav: 16px;
+  --fs-tag: 10px;
+
+  /* margen general: el mismo valor gobierna los bordes laterales,
+     el hueco bajo la nav y el espaciado entre proyectos, para que
+     todo el marco de la página respire de forma consistente */
+  --pad: clamp(9px, 0.9vw, 13px);
+
+  /* separación entre la nav y el primer contenido de cada
+     página (retícula de Works, portada de proyecto, mosaico de
+     Archive, titular de Sound, texto de Info) — un único valor
+     para que todas empiecen exactamente a la misma altura */
+  --content-top: 6px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* modo noche: se activa con la clase .dark en <html> (toggle
+   junto a Info) y persiste entre páginas vía localStorage */
+:root.dark {
+  --bg: #111111;
+  --ink: #f2f2f2;
+  --ph: #262626;
+  --ph-dark: #383838;
+  --line: #f2f2f2;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { background: var(--bg); }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-serif);
+  line-height: 1.55;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+/* nada es clicable mientras dura la animación de carga */
+body.is-loading { pointer-events: none; }
+
+/* el fundido de entrada/salida vive en .page-fade, no en body,
+   para que la navbar (que queda fuera de ese contenedor) no se
+   vea afectada al navegar entre secciones. Solo anima opacidad
+   (sin transform): es más barato de componer para el navegador,
+   que es justo lo que necesita la nav con mix-blend-mode encima */
+.page-fade {
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 0.45s var(--ease);
+}
+body.is-ready .page-fade { opacity: 1; }
+
+body.page-leave .page-fade {
+  opacity: 0 !important;
+  transition: opacity 0.3s var(--ease);
+}
+
+/* en la home, lo que se desvanece al salir es la propia galería
+   (la nav tampoco se ve afectada aquí) */
+body.page-leave .carousel {
+  opacity: 0 !important;
+  transition: opacity 0.3s var(--ease) !important;
+}
+
+/* la home no hace scroll: es una pantalla fija con la galería
+   moviéndose sola dentro */
+body.is-home { height: 100svh; overflow: hidden; }
+
+/* ============================================================
+   PANTALLA DE CARGA — solo en la home, solo una vez por sesión.
+   Primero aparece el nombre, luego cada palabra de la línea de
+   abajo se escribe letra a letra, y al terminar da paso al
+   carrusel (ver js/main.js para la secuencia y los tiempos).
+   ============================================================ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: none; /* sin fondo que cubra, nunca bloquea clics */
+  transition: visibility 0.9s;
+}
+.preloader.is-hidden { visibility: hidden; }
+
+.preloader__inner {
+  width: 100%;
+  padding: 0 var(--pad);
+  /* el hueco de arriba coincide con la altura real de la navbar
+     (medida por JS): así el bloque cae justo en el espacio en
+     blanco entre la nav y el carrusel, no en el centro de la
+     pantalla — al desvanecerse, encaja con lo que ya hay debajo */
+  padding-top: var(--preloader-top, 70px);
+  transition: transform 0.9s var(--ease), opacity 0.9s var(--ease);
+}
+/* solo esto se mueve al salir — como una capa flotante propia,
+   aprovechando que el fondo de la home ya es blanco de por sí */
+.preloader.is-hidden .preloader__inner {
+  transform: translateY(-36px);
+  opacity: 0;
+}
+
+.preloader__name {
+  display: inline-block; /* la caja se ajusta al texto: así JS puede medir su ancho real, no el del bloque estirado */
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 100px; /* valor de referencia: js/main.js lo recalcula para llegar justo al borde */
+  letter-spacing: -0.037em;
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.preloader__name.is-in { opacity: 1; transform: translateY(0); }
+
+.preloader__tagline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: clamp(-10px, -0.4vw, -4px);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: normal;
+  color: var(--ink);
+  /* altura reservada en píxeles fijos (no em): así no depende de
+     las métricas de ninguna fuente ni de en qué momento cargue,
+     y el bloque centrado nunca tiene nada que recalcular */
+  min-height: 22px;
+}
+/* mientras no le toca a una palabra, ocupa su sitio pero invisible
+   (para que las demás no se desplacen al ir apareciendo el texto) */
+.preloader__tagline span { visibility: hidden; white-space: nowrap; flex-shrink: 0; }
+.preloader__tagline span.is-typing { visibility: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-fade, body.page-leave .page-fade { transition: none !important; transform: none !important; opacity: 1 !important; }
+}
+
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* ============================================================
+   NAVEGACIÓN
+   Fija arriba (sticky) en todas las páginas. El texto es blanco
+   con mix-blend-mode: difference, así que se invierte según lo
+   que tenga debajo: negro sobre fondo blanco, blanco sobre una
+   imagen oscura, sin tener que gestionarlo a mano.
+   ============================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 5px var(--pad) 0;
+  margin-bottom: var(--pad);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-nav);
+  color: #fff;
+  mix-blend-mode: difference;
+  background: transparent;
+}
+.nav a { color: inherit; }
+
+/* la nav entra deslizándose desde arriba SOLO cuando la pantalla
+   de carga se ejecuta de verdad (primera vez en la sesión) — si
+   llegas a la home navegando por un enlace (p. ej. el logo) y la
+   carga ya se vio antes, la nav aparece igual que en cualquier
+   otra página, sin deslizarse ni "quedarse fija" en ninguna
+   animación rara */
+body.preload-nav .nav {
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+body.preload-nav.is-ready .nav { opacity: 1; transform: translateY(0); }
+
+.nav__logo {
+  display: flex;
+  align-items: baseline;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.8vw, 28px);
+}
+
+/* la sección activa se marca con el mismo gris que las etiquetas
+   (misma opacidad sobre --ink), en vez de un asterisco delante */
+.nav__links a.is-active { opacity: 0.4; }
+
+.nav__project {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: var(--fs-serif);
+  line-height: 1;
+}
+
+/* el interruptor de tema vive dentro de .nav__links como un
+   elemento más, así que hereda el mismo hueco que separa el
+   resto de las secciones — nada de agrupación pegada a Info */
+/* usa blanco a propósito: al vivir dentro de la nav (mezcla de
+   color con el fondo), el blanco se invierte solo a negro sobre
+   fondo claro y se queda blanco sobre fondo oscuro — el mismo
+   truco que ya usa el texto de la nav, sin reglas aparte para
+   cada modo */
+.theme-toggle {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  background: linear-gradient(90deg, #fff 50%, transparent 50%);
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* en la home la nav no necesita el hueco inferior extra: el
+   propio margen del carrusel ya se encarga de separar */
+.carousel-page .nav { margin-bottom: 0; }
+
+/* ============================================================
+   ETIQUETAS
+   ============================================================ */
+/* gris claro: se consigue con opacidad sobre --ink, así queda
+   igual de sutil en modo claro que en modo oscuro sin necesitar
+   un color aparte para cada tema */
+.tag {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-tag);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.4;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+
+/* mismo estilo que .slide__cat del carrusel: una sola línea con
+   puntos como separador, en vez de píldoras sueltas — y la misma
+   proporción de tamaño respecto al título (ahí 10px sobre 15px de
+   título; aquí 10px sobre 16px, la misma relación en la práctica) */
+.card__cats {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-tag);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0;
+  margin-top: 1px;
+  transition: opacity 0.3s ease;
+}
+.card:hover .card__cats { opacity: 0.4; }
+
+/* mismo estilo, pero para las páginas de proyecto individuales:
+   siempre visible, no depende de ningún hover (eso era específico
+   de las tarjetas de Works) */
+.project-cats {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-tag);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.4;
+}
+
+/* ============================================================
+   HOME — GALERÍA CONTINUA
+   La página queda fija (sin scroll); solo la galería se mueve,
+   sola y despacio, y se acelera con la rueda/trackpad o el
+   arrastre, siempre con la misma velocidad continua (JS con
+   requestAnimationFrame en vez de una animación CSS, para poder
+   mezclar deriva automática + impulso manual sin saltos).
+   ============================================================ */
+.carousel-page {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.carousel {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;      /* las piezas se posan en el borde inferior */
+  position: relative;
+  overflow: hidden;
+  margin: var(--pad) 0 0;     /* sin margen abajo: toca el borde de la pantalla */
+  cursor: grab;
+  touch-action: none;
+
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+body.is-ready .carousel { opacity: 1; transform: translateY(0); }
+.carousel.is-dragging { cursor: grabbing; }
+
+.track {
+  display: flex;
+  gap: 6px;
+  height: 60%;                /* más pequeñas: dejan bastante aire arriba */
+  width: max-content;
+  padding-left: var(--pad);
+  will-change: transform;
+}
+
+/* cada pieza usa su proporción real: se fija la altura (la del
+   track) y el ancho lo calcula el navegador a partir del propio
+   tamaño intrínseco del vídeo o la imagen — así cada diapositiva
+   respeta su encuadre original, sin forzar una categoría genérica */
+.slide {
+  position: relative;
+  flex: 0 0 auto;
+  height: 100%;
+  background: var(--ph);
+  overflow: hidden;
+}
+.slide img, .slide video {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.slide__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 16px 24px;
+  background: linear-gradient(to top, rgba(0,0,0,0.28), transparent 55%);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .slide:hover .slide__label { opacity: 1; transform: translateY(0); }
+}
+
+.slide__name { font-family: var(--serif); font-size: 15px; color: #fff; }
+.slide__name em { font-style: italic; }
+
+.slide__cat {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  margin-top: 3px;
+}
+
+/* ============================================================
+   WORKS — filas de 3, alineadas por la base. Cada fila es su
+   propia retícula, así que el orden es siempre exacto (nunca se
+   rompe) y las piezas conservan su proporción real dentro de la
+   fila en vez de estirarse todas a la misma altura.
+   ============================================================ */
+.rows { padding: var(--content-top) var(--pad) 30px; }
+
+.works-grid {
+  columns: 2;
+  column-gap: 6px;
+}
+
+.card {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin-bottom: 26px;
+}
+
+.card__img {
+  background: var(--ph);
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+}
+/* misma proporción horizontal para todas las piezas: da un
+   aspecto ordenado y regular, a costa de recortar cada imagen o
+   vídeo a ese formato común en vez de respetar su encuadre real */
+.card__img img, .card__img video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+.card:hover .card__img img, .card:hover .card__img video { transform: scale(1.06); }
+
+.card__caption { font-size: var(--fs-serif); margin-top: 6px; }
+.card__caption em { font-style: italic; }
+
+/* las disciplinas solo aparecen sutilmente al pasar el ratón por
+   el proyecto — el peso gris ya las marca como secundarias, y
+   quedan ocultas por defecto para no competir con el título */
+/* ============================================================
+   PÁGINA DE PROYECTO
+   Orden: portada grande -> título y descripción -> resto de
+   imágenes. El título ya no vive en la nav, así que necesita
+   su propio tratamiento visual.
+   ============================================================ */
+.project-cover { padding: var(--content-top) var(--pad) 0; }
+.project-cover .ph-block.full {
+  aspect-ratio: 16 / 9;
+  background: var(--ph);
+  overflow: hidden;
+}
+.project-cover .ph-block.full img,
+.project-cover .ph-block.full video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* dos columnas: título grande a la izquierda, texto + ficha
+   técnica a la derecha — como una hoja de créditos editorial */
+.project-intro {
+  padding: 20px var(--pad) 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--pad);
+  align-items: start;
+}
+
+/* título: solo el nombre, sin subtítulo al lado; capitalización
+   normal (no todo en mayúsculas) */
+.project-intro__title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(30px, 4.5vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.project-intro__body p { margin-bottom: 1.1em; max-width: 72ch; }
+.project-intro__body .meta { margin-top: 24px; }
+.project-intro__body .tags { margin-top: 10px; margin-bottom: 24px; }
+
+/* ficha técnica con guía de puntos entre etiqueta y valor, al
+   estilo de un colofón editorial */
+.project-specs {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.project-specs .row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+.project-specs .row dt {
+  flex-shrink: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.project-specs .row .dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--line);
+  margin-bottom: 3px;
+}
+.project-specs .row dd { flex-shrink: 0; }
+
+@media (max-width: 900px) {
+  .project-intro { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.u-dotted {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+.project-media {
+  padding: 60px var(--pad) 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--pad);
+}
+.project-media .ph-block { background: var(--ph); aspect-ratio: 16 / 10; }
+.project-media .ph-block.full { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
+.project-media .ph-block.tall { aspect-ratio: 4 / 5; }
+.project-media .ph-block img,
+.project-media .ph-block video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ============================================================
+   REVELADO AL HACER SCROLL — las tarjetas de Works, las imágenes
+   dentro de cada proyecto y las fotos de Info empiezan invisibles;
+   un IntersectionObserver (ver js/main.js) añade .is-visible en
+   cuanto entran en pantalla. Las de Info solo usan opacidad (sin
+   desplazamiento) porque su posición exacta se mide en JS para
+   colocar las tarjetas de premios a su lado — un transform ahí
+   podría desajustar esa medición según el momento en que se dispare
+   ============================================================ */
+.card,
+.project-media .ph-block {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.card.is-visible,
+.project-media .ph-block.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.studio__photos .ph-block {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.studio__photos .ph-block.is-visible { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .project-media .ph-block, .studio__photos .ph-block { opacity: 1; transform: none; transition: none; }
+}
+
+.more {
+  display: grid;
+  grid-template-columns: minmax(0, 820px) 1fr;
+  gap: clamp(24px, 4vw, 80px);
+  padding: clamp(64px, 11vh, 130px) var(--pad) 15px;
+  align-items: start;
+}
+
+.more__label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-tag);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.more__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--fs-serif);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+.more__row em { font-style: italic; }
+
+.more__row::before {
+  content: '\2192';
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.more__row.is-current::before,
+.more__row:hover::before { opacity: 1; }
+
+.more__row:hover { padding-left: 10px; }
+.more__row:not(.is-current):hover { opacity: 0.55; }
+.more__row.is-current { opacity: 1; }
+
+/* vacía por defecto: se rellena con la imagen o vídeo propio de
+   cada proyecto de la lista al pasar el ratón por encima (ver
+   js/main.js), en vez de mostrar siempre una imagen fija */
+.more__thumb {
+  background: var(--ph);
+  aspect-ratio: 4 / 5;
+  max-width: 420px;
+  width: 100%;
+  justify-self: end;
+  position: sticky;
+  top: calc(var(--fs-nav) + var(--pad) * 3);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.more__thumb.is-visible { opacity: 1; }
+.more__thumb img, .more__thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ============================================================
+   ARCHIVE — mosaico denso, sin espaciado entre piezas, en
+   columnas; cada imagen conserva su proporción real (por eso no
+   se fuerza un aspect-ratio uniforme, solo variantes de ejemplo
+   mientras son placeholders)
+   ============================================================ */
+.archive-grid {
+  columns: 8;
+  column-gap: 0;
+  padding-top: var(--content-top);
+}
+
+.archive-grid__item {
+  break-inside: avoid;
+  display: block;
+  width: 100%;
+  background: var(--ph);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(26px);
+  transition: filter 0.4s ease, opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+/* el JS marca cada pieza como cargada en cuanto su imagen o vídeo
+   está listo de verdad, así el fundido con leve subida sustituye
+   al "chispazo" brusco de que cada archivo remoto aparezca en un
+   instante distinto según tarde en descargarse */
+.archive-grid__item.is-loaded { opacity: 1; transform: translateY(0); }
+.archive-grid__item:hover { filter: brightness(0.94); }
+.archive-grid__item img,
+.archive-grid__item video { width: 100%; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-grid__item { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* proporciones de muestra para los placeholders — en cuanto haya
+   imágenes reales, cada <img> impone su propia altura natural y
+   estas clases dejan de hacer falta */
+.archive-grid__item.ar-1 { aspect-ratio: 1 / 1; }
+.archive-grid__item.ar-2 { aspect-ratio: 3 / 4; }
+.archive-grid__item.ar-3 { aspect-ratio: 4 / 3; }
+.archive-grid__item.ar-4 { aspect-ratio: 2 / 3; }
+.archive-grid__item.ar-5 { aspect-ratio: 16 / 9; }
+.archive-grid__item.ar-6 { aspect-ratio: 9 / 16; }
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: color-mix(in srgb, var(--bg) 98%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  user-select: none;
+  transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
+}
+.lightbox.is-open { opacity: 1; visibility: visible; }
+
+/* visor de dos capas: un marco de tamaño fijo (viewport) con dos
+   "diapositivas" superpuestas que se desplazan a la vez — la que
+   sale y la que entra están ambas visibles y en movimiento, así
+   que se cruzan en vez de desvanecerse una tras otra */
+.lightbox__viewport {
+  position: relative;
+  width: 56vw;
+  height: 64vh;
+  max-width: 900px;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform 0.4s var(--ease);
+}
+.lightbox.is-open .lightbox__viewport { transform: scale(1); }
+
+.lightbox__slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightbox__slide img,
+.lightbox__slide video {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.lightbox__placeholder { background: var(--ph); width: 60%; max-width: 420px; aspect-ratio: 1 / 1; }
+
+/* vistas previas de la anterior/siguiente pieza: pequeñas,
+   borrosas, a los lados — clicables para saltar directamente */
+.lightbox__peek {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(64px, 8vw, 108px);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--ph);
+  opacity: 0.4;
+  filter: blur(3px);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  z-index: 8;
+}
+.lightbox__peek:hover { opacity: 0.75; filter: blur(0.5px); }
+.lightbox__peek img, .lightbox__peek video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lightbox__peek--prev { left: var(--pad); }
+.lightbox__peek--next { right: var(--pad); }
+
+/* mini título de la pieza: ahora centrado (misma altura que la X
+   y la navbar), en serif cursiva, al mismo tamaño que las
+   etiquetas que salen al pasar el ratón por el carrusel */
+.lightbox__title {
+  position: fixed;
+  z-index: 10;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.lightbox__close {
+  position: fixed;
+  z-index: 10;
+  top: 5px;
+  right: var(--pad);
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+}
+.lightbox__close:hover { opacity: 0.5; }
+
+/* cursor de doble flecha (izquierda/derecha) en cualquier zona
+   donde hacer clic avance o retroceda: la imagen, y también el
+   fondo blanco alrededor */
+.lightbox, .lightbox__slide { cursor: ew-resize; }
+.lightbox__close, .lightbox__peek { cursor: pointer; }
+
+.lightbox__counter {
+  position: fixed;
+  z-index: 10;
+  top: 5px;
+  left: var(--pad);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .lightbox__peek { display: none; }
+  .lightbox__viewport { width: 84vw; height: 70vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox__slide { transition: none !important; }
+}
+
+/* ============================================================
+   SOUND — mismas tipografías y color del sitio, pero con una
+   composición que evoca la sesión de un DAW (Logic Pro): una
+   regla de tiempo arriba, pistas en carriles horizontales con
+   forma de onda y datos técnicos, botón de reproducción tipo
+   transporte. El "look" técnico viene del layout, no de fuentes
+   o colores nuevos.
+   ============================================================ */
+/* mismo layout de título + texto a dos columnas que usan las
+   páginas de proyecto individuales (.project-intro) — solo se le
+   añade el hueco antes de la sesión de abajo */
+.sound-hero { margin-bottom: clamp(24px, 4vh, 40px); padding-top: var(--content-top); }
+
+/* sesión: el marco que agrupa la regla y las pistas, con una
+   retícula vertical muy tenue de fondo, como el timeline de un
+   secuenciador */
+.sound-session {
+  margin: 0 var(--pad) 30px;
+  border: 1px solid var(--line);
+}
+
+/* regla de tiempo: misma estructura de columnas (160px + resto)
+   que cada pista de abajo, para que las líneas verticales caigan
+   exactamente en el mismo sitio en toda la tabla */
+.sound-ruler {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.sound-ruler__spacer { border-right: 1px solid var(--line); }
+.sound-ruler__marks {
+  display: flex;
+  padding: 8px 14px; /* mismo padding horizontal que .sound-track__lane */
+  background-image: repeating-linear-gradient(
+    to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12.5%
+  );
+  background-position: 0 0; /* mismo origen que .sound-track__lane */
+}
+.sound-ruler__marks span {
+  flex: 1;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  opacity: 0.4;
+  /* el número queda pegado justo a la derecha de su línea */
+  padding-left: 4px;
+}
+
+.sound-track {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.sound-track:last-child { border-bottom: none; }
+
+/* cabecera de la pista, como el canal de un mezclador */
+.sound-track__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  border-right: 1px solid var(--line);
+}
+.sound-track__index {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--fs-tag);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+.sound-track__play {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sound-track__play:hover { background: var(--ink); color: var(--bg); }
+
+.sound-track__title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* carril de la pista: forma de onda + línea de datos técnicos,
+   como una región de audio dentro del secuenciador */
+.sound-track__lane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background-image: repeating-linear-gradient(
+    to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12.5%
+  );
+  background-position: 0 0;
+  opacity: 1;
+}
+
+.sound-track__wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 26px;
+}
+.sound-track__wave span {
+  flex: 1;
+  background: var(--line);
+  opacity: 0.55;
+  border-radius: 1px;
+}
+
+.sound-track__meta {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+/* botón "Ver proceso": discreto, a la derecha del carril */
+.sound-track__process {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sound-track__process:hover { background: var(--ink); color: var(--bg); }
+
+/* ============================================================
+   VENTANA DE PROCESO — capturas y explicación del flujo de
+   trabajo en Logic Pro X para la pista seleccionada
+   ============================================================ */
+.process-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  overflow-y: auto;
+  transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
+}
+.process-modal.is-open { opacity: 1; visibility: visible; }
+
+.process-modal__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 70px var(--pad) 80px;
+}
+
+.process-modal__close {
+  position: fixed;
+  z-index: 601;
+  /* debajo de la nav por completo (su alto real: tamaño de letra +
+     su propio padding y margen) — así ni siquiera comparten el
+     mismo espacio, en vez de fiarlo todo a estar por encima en la
+     pila de capas, que con el mix-blend-mode de la nav seguía
+     dando problemas visuales */
+  top: calc(var(--fs-nav) + 5px + var(--pad) * 2);
+  right: var(--pad);
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 8px;
+  transition: opacity 0.2s ease;
+}
+.process-modal__close:hover { opacity: 0.5; }
+
+.process-modal__title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(21px, 2.4vw, 27px);
+  letter-spacing: -0.015em;
+  margin-bottom: 8px;
+}
+.process-modal__subtitle { opacity: 0.6; margin-bottom: 36px; }
+
+.process-step { margin-bottom: 36px; }
+.process-step .ph-block {
+  background: var(--ph);
+  aspect-ratio: 16 / 10;
+  margin-bottom: 12px;
+}
+.process-step p { font-size: 15px; max-width: 60ch; }
+.process-step .step-num {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 680px) {
+  .sound-track { grid-template-columns: 1fr; }
+  .sound-track__head { border-right: none; border-bottom: 1px solid var(--line); }
+  .sound-ruler__marks span:nth-child(n+5) { display: none; }
+  .sound-track__process { font-size: 9px; padding: 4px 10px; }
+}
+.studio {
+  padding: var(--content-top) var(--pad) 20px;
+}
+.studio__text { max-width: 720px; }
+.studio__text p { margin-bottom: 1em; max-width: 52ch; }
+
+.studio__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 720px;
+}
+
+/* fijas en pantalla (se quedan visibles al hacer scroll), pero
+   estrechas — no ocupan una columna entera, solo el ancho propio
+   de una tarjeta de premio. El JS coloca su altura inicial a la
+   misma que las fotos y las "acopla" justo encima del footer al
+   acercarse, para no taparlo nunca. */
+.awards {
+  position: fixed;
+  z-index: 20;
+  right: var(--pad);
+  top: var(--awards-top, 340px);
+  width: min(300px, 26vw);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.awards.is-docked { position: absolute; }
+
+/* aparecen con un fundido propio, cada una en su momento — no
+   depende del fundido general de la página (.page-fade), es una
+   animación exclusiva de estas dos tarjetas */
+.award-card {
+  background: var(--ph);
+  border-radius: 14px;
+  padding: 18px 20px 22px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+.award-card.is-in { opacity: 1; transform: translateY(0); }
+.award-card__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.award-card__top .tag { font-size: 13px; opacity: 1; }
+.award-card__top a {
+  font-family: var(--sans); font-weight: 700; font-size: 13px;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.award-card__title { font-style: italic; line-height: 1.3; }
+.award-card__sub { font-size: 14px; opacity: 0.65; margin-top: 4px; }
+
+/* dos fotos grandes, subidas (menos aire por encima que antes) */
+.studio__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: var(--pad);
+  padding: 8px var(--pad) 0;
+}
+.studio__photos .ph-block { background: var(--ph); aspect-ratio: 4 / 3; overflow: hidden; }
+.studio__photos .ph-block.tall { aspect-ratio: 3 / 4; }
+.studio__photos .ph-block img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* deja hueco a la derecha para que las fotos no queden debajo
+   de las tarjetas fijas de premios (que flotan encima) */
+.studio__photos { padding-right: calc(min(300px, 26vw) + var(--pad) * 2); }
+
+@media (max-width: 900px) {
+  .awards {
+    position: static;
+    width: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--pad); /* mismo hueco que entre las fotos, no el de escritorio (16px) */
+    margin: 24px var(--pad) 0;
+  }
+  .award-card { flex: 1; min-width: 220px; }
+  /* en móvil las tarjetas ya no flotan sobre las fotos, así que
+     ese hueco reservado a la derecha ya no hace falta */
+  .studio__photos { padding-right: var(--pad); }
+  .studio__cols { grid-template-columns: 1fr; max-width: none; }
+}
+@media (max-width: 680px) {
+  .awards { flex-direction: column; }
+  .award-card { min-width: 0; }
+  .studio__photos { grid-template-columns: 1fr; padding-right: var(--pad); }
+}
+
+/* ============================================================
+   FOOTER — tres columnas en mayúsculas, Diatype Bold
+   ============================================================ */
+.footer {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.3fr;
+  gap: 28px;
+  align-items: start;
+  padding: clamp(56px, 9vh, 110px) var(--pad) 30px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+.footer__col--right { justify-self: end; max-width: 560px; font-size: 12.5px; line-height: 1.55; }
+.footer a { position: relative; }
+.footer a:hover { opacity: 0.55; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1000px) {
+  .works-grid { columns: 2; }
+  .archive-grid { columns: 5; }
+  .more { grid-template-columns: 1fr; }
+  .more__thumb { position: static; justify-self: start; max-width: 340px; }
+  .footer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 680px) {
+  :root { --fs-serif: 15px; --fs-nav: 15px; }
+  .works-grid { columns: 1; }
+  .archive-grid { columns: 3; }
+  .project-media { grid-template-columns: 1fr; }
+  .studio__cols { grid-template-columns: 1fr; }
+  .studio__photos { grid-template-columns: 1fr; }
+  .footer { grid-template-columns: 1fr; gap: 22px; }
+
+  /* en móvil el carrusel ocupa toda la pantalla disponible bajo
+     la nav (en vez del 60% con aire arriba que se usa en escritorio) */
+  .track { height: 100%; }
+  .carousel { margin-top: 0; }
+}

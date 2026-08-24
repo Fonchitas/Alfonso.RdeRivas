@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sound — Alfonso R. de Rivas</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <a href="works.html">Works</a>
+      <a href="archive.html">Archive</a>
+      <a href="sound.html" class="is-active">Sound</a>
+      <a href="info.html">Info</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+  <div class="page-fade">
+  <section class="sound-hero project-intro">
+    <h1 class="project-intro__title">Music Production</h1>
+    <div class="project-intro__body">
+      <p>
+        Besides design, I compose the music for some of my own projects.
+        I work in Logic Pro X, mainly on ambient recordings and original
+        compositions meant to accompany visual pieces — the soundtrack for
+        Simbiosis comes from this same process.
+      </p>
+      <p>
+        Each track usually starts from a texture or a simple rhythmic
+        pattern that I build layer by layer, closer to constructing an
+        atmosphere than following a conventional musical structure. I'm
+        especially interested in where sound and design meet: how a
+        harmonic progression can reinforce a piece's visual rhythm, or how
+        silence and space work the same way in both languages. Most of
+        these compositions are born for a specific project, but several
+        have ended up taking on a life of their own beyond it.
+      </p>
+    </div>
+  </section>
+
+  <!-- Sesión estilo DAW: regla de tiempo arriba, pistas con forma
+       de onda y datos técnicos en cada carril, como un secuenciador -->
+  <section class="sound-session">
+    <div class="sound-ruler">
+    <div class="sound-ruler__spacer"></div>
+    <div class="sound-ruler__marks">
+    <span>01</span>
+    <span>05</span>
+    <span>09</span>
+    <span>13</span>
+    <span>17</span>
+    <span>21</span>
+    <span>25</span>
+    <span>29</span>
+    </div>
+    </div>
+
+      <div class="sound-track">
+        <div class="sound-track__head">
+          <span class="sound-track__index">01</span>
+          <button class="sound-track__play" aria-label="Play Deriva" data-audio="audio/deriva.mp3">▶</button>
+          <span class="sound-track__title">Deriva</span>
+        </div>
+        <div class="sound-track__lane">
+          <span class="sound-track__wave">
+            <span style="height:7px"></span>
+            <span style="height:21px"></span>
+            <span style="height:5px"></span>
+            <span style="height:11px"></span>
+            <span style="height:6px"></span>
+            <span style="height:18px"></span>
+            <span style="height:17px"></span>
+            <span style="height:18px"></span>
+            <span style="height:23px"></span>
+            <span style="height:15px"></span>
+            <span style="height:9px"></span>
+            <span style="height:6px"></span>
+            <span style="height:18px"></span>
+            <span style="height:3px"></span>
+            <span style="height:15px"></span>
+            <span style="height:16px"></span>
+            <span style="height:22px"></span>
+            <span style="height:3px"></span>
+            <span style="height:25px"></span>
+            <span style="height:17px"></span>
+            <span style="height:11px"></span>
+            <span style="height:26px"></span>
+            <span style="height:10px"></span>
+            <span style="height:21px"></span>
+            <span style="height:6px"></span>
+            <span style="height:13px"></span>
+            <span style="height:3px"></span>
+            <span style="height:3px"></span>
+            <span style="height:3px"></span>
+            <span style="height:23px"></span>
+            <span style="height:20px"></span>
+            <span style="height:3px"></span>
+            <span style="height:15px"></span>
+            <span style="height:24px"></span>
+            <span style="height:9px"></span>
+            <span style="height:16px"></span>
+            <span style="height:26px"></span>
+            <span style="height:3px"></span>
+            <span style="height:19px"></span>
+            <span style="height:10px"></span>
+          </span>
+          <span class="sound-track__meta">Ambient — Col.01 OLAS · 3:42 · 96 BPM · Am</span>
+          <button class="sound-track__process" data-process="0">View process</button>
+        </div>
+      </div>
+
+      <div class="sound-track">
+        <div class="sound-track__head">
+          <span class="sound-track__index">02</span>
+          <button class="sound-track__play" aria-label="Play Campo abierto" data-audio="audio/campo-abierto.mp3">▶</button>
+          <span class="sound-track__title">Campo abierto</span>
+        </div>
+        <div class="sound-track__lane">
+          <span class="sound-track__wave">
+            <span style="height:4px"></span>
+            <span style="height:5px"></span>
+            <span style="height:5px"></span>
+            <span style="height:14px"></span>
+            <span style="height:8px"></span>
+            <span style="height:26px"></span>
+            <span style="height:24px"></span>
+            <span style="height:12px"></span>
+            <span style="height:11px"></span>
+            <span style="height:22px"></span>
+            <span style="height:9px"></span>
+            <span style="height:22px"></span>
+            <span style="height:4px"></span>
+            <span style="height:21px"></span>
+            <span style="height:24px"></span>
+            <span style="height:8px"></span>
+            <span style="height:16px"></span>
+            <span style="height:23px"></span>
+            <span style="height:15px"></span>
+            <span style="height:26px"></span>
+            <span style="height:19px"></span>
+            <span style="height:14px"></span>
+            <span style="height:20px"></span>
+            <span style="height:17px"></span>
+            <span style="height:19px"></span>
+            <span style="height:11px"></span>
+            <span style="height:4px"></span>
+            <span style="height:3px"></span>
+            <span style="height:14px"></span>
+            <span style="height:17px"></span>
+            <span style="height:13px"></span>
+            <span style="height:15px"></span>
+            <span style="height:16px"></span>
+            <span style="height:19px"></span>
+            <span style="height:8px"></span>
+            <span style="height:20px"></span>
+            <span style="height:8px"></span>
+            <span style="height:10px"></span>
+            <span style="height:10px"></span>
+            <span style="height:3px"></span>
+          </span>
+          <span class="sound-track__meta">Ambient — Col.02 CAMPO · 4:15 · 88 BPM · Dm</span>
+          <button class="sound-track__process" data-process="1">View process</button>
+        </div>
+      </div>
+
+      <div class="sound-track">
+        <div class="sound-track__head">
+          <span class="sound-track__index">03</span>
+          <button class="sound-track__play" aria-label="Play Estudio 01">▶</button>
+          <span class="sound-track__title">Estudio 01</span>
+        </div>
+        <div class="sound-track__lane">
+          <span class="sound-track__wave">
+            <span style="height:10px"></span>
+            <span style="height:21px"></span>
+            <span style="height:20px"></span>
+            <span style="height:7px"></span>
+            <span style="height:14px"></span>
+            <span style="height:22px"></span>
+            <span style="height:18px"></span>
+            <span style="height:23px"></span>
+            <span style="height:21px"></span>
+            <span style="height:5px"></span>
+            <span style="height:22px"></span>
+            <span style="height:3px"></span>
+            <span style="height:18px"></span>
+            <span style="height:11px"></span>
+            <span style="height:20px"></span>
+            <span style="height:10px"></span>
+            <span style="height:9px"></span>
+            <span style="height:25px"></span>
+            <span style="height:18px"></span>
+            <span style="height:20px"></span>
+            <span style="height:20px"></span>
+            <span style="height:18px"></span>
+            <span style="height:15px"></span>
+            <span style="height:23px"></span>
+            <span style="height:7px"></span>
+            <span style="height:10px"></span>
+            <span style="height:23px"></span>
+            <span style="height:7px"></span>
+            <span style="height:19px"></span>
+            <span style="height:15px"></span>
+            <span style="height:26px"></span>
+            <span style="height:3px"></span>
+            <span style="height:24px"></span>
+            <span style="height:5px"></span>
+            <span style="height:8px"></span>
+            <span style="height:21px"></span>
+            <span style="height:4px"></span>
+            <span style="height:12px"></span>
+            <span style="height:3px"></span>
+            <span style="height:11px"></span>
+          </span>
+          <span class="sound-track__meta">Original composition · 2:58 · 120 BPM · C</span>
+          <button class="sound-track__process" data-process="2">View process</button>
+        </div>
+      </div>
+
+      <div class="sound-track">
+        <div class="sound-track__head">
+          <span class="sound-track__index">04</span>
+          <button class="sound-track__play" aria-label="Play Estudio 02">▶</button>
+          <span class="sound-track__title">Estudio 02</span>
+        </div>
+        <div class="sound-track__lane">
+          <span class="sound-track__wave">
+            <span style="height:10px"></span>
+            <span style="height:12px"></span>
+            <span style="height:6px"></span>
+            <span style="height:26px"></span>
+            <span style="height:15px"></span>
+            <span style="height:18px"></span>
+            <span style="height:7px"></span>
+            <span style="height:5px"></span>
+            <span style="height:5px"></span>
+            <span style="height:3px"></span>
+            <span style="height:15px"></span>
+            <span style="height:20px"></span>
+            <span style="height:12px"></span>
+            <span style="height:4px"></span>
+            <span style="height:10px"></span>
+            <span style="height:19px"></span>
+            <span style="height:20px"></span>
+            <span style="height:14px"></span>
+            <span style="height:11px"></span>
+            <span style="height:8px"></span>
+            <span style="height:6px"></span>
+            <span style="height:11px"></span>
+            <span style="height:9px"></span>
+            <span style="height:3px"></span>
+            <span style="height:23px"></span>
+            <span style="height:11px"></span>
+            <span style="height:11px"></span>
+            <span style="height:9px"></span>
+            <span style="height:8px"></span>
+            <span style="height:12px"></span>
+            <span style="height:12px"></span>
+            <span style="height:23px"></span>
+            <span style="height:26px"></span>
+            <span style="height:14px"></span>
+            <span style="height:5px"></span>
+            <span style="height:22px"></span>
+            <span style="height:13px"></span>
+            <span style="height:24px"></span>
+            <span style="height:15px"></span>
+            <span style="height:19px"></span>
+          </span>
+          <span class="sound-track__meta">Original composition · 3:20 · 104 BPM · Em</span>
+          <button class="sound-track__process" data-process="3">View process</button>
+        </div>
+      </div>
+  </section>
+
+  <!-- Ventana de proceso: capturas y explicación del flujo de
+       trabajo en Logic Pro X para la pista seleccionada -->
+  <div class="process-modal" id="processModal">
+    <button class="process-modal__close" id="processModalClose">✕</button>
+    <div class="process-modal__inner" id="processModalBody"></div>
+  </div>
+
+  <footer class="footer">
+    <div>
+      Alfonso Rodríguez de Rivas —<br />
+      Multimedia &amp; Graphic Designer<br />
+      Based in Madrid, Spain
+    </div>
+    <div>
+      +34 620 139 947<br />
+      <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+      <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer__col--right">
+      ©Alfonso R. de Rivas, 2026<br />
+      Web designed and coded by me.
+      Typefaces: Diatype by Dinamo and Herbik by Daniel Veneklaas.
+    </div>
+  </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

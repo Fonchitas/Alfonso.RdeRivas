@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo Encaja — Alfonso R. de Rivas</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <a href="works.html" class="is-active">Works</a>
+      <a href="archive.html">Archive</a>
+      <a href="sound.html">Sound</a>
+      <a href="info.html">Info</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+  <div class="page-fade">
+  <!-- PORTADA: lo primero que se ve al entrar al proyecto -->
+  <section class="project-cover">
+    <div class="ph-block full"><img src="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png" alt="" loading="lazy" /></div>
+  </section>
+
+  <!-- Dos columnas: título grande a la izquierda, texto + ficha
+       técnica con guía de puntos a la derecha -->
+  <section class="project-intro">
+    <h1 class="project-intro__title">Todo Encaja</h1>
+    <div class="project-intro__body">
+      <p>
+        Todo Encaja is a packaging project for a canned-goods catalogue
+        by ANFACO-CECOPESCA in collaboration with Banco Sabadell, winner of
+        the ANFACO Design Award 2026.
+      </p>
+      <p class="meta">
+        Recognition: <a class="u-dotted" href="#">ANFACO Design Award, 2026</a>
+      </p>
+      <span class="project-cats">Packaging</span>
+      <dl class="project-specs">
+      <div class="row"><dt>Role</dt><span class="dots"></span><dd>Packaging design</dd></div>
+      <div class="row"><dt>Field</dt><span class="dots"></span><dd>Packaging</dd></div>
+      <div class="row"><dt>Client</dt><span class="dots"></span><dd>ANFACO-CECOPESCA × Banco Sabadell</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Resto de imágenes del proyecto -->
+  <section class="project-media">
+    <div class="ph-block"></div>
+    <div class="ph-block"></div>
+    <div class="ph-block tall"></div>
+    <div class="ph-block tall"></div>
+  </section>
+
+  <section class="more">
+    <div>
+      <div class="more__label">More projects</div>
+      <a class="more__row" href="simbiosis.html" data-thumb-type="video" data-thumb="https://ik.imagekit.io/k0qx6odcz/Alfonso_Rodriguez_Spot.2%20(1).mp4">Simbiosis, <em>identity, music and 3D for a cultural mediation system.</em></a>
+      <a class="more__row" href="proyecto-anfaco.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/A1_75972-Portada-WEB.jpg">Specimen, <em>Laus Inbook 2026 award.</em></a>
+      <a class="more__row" href="proyecto-laus.html" data-thumb-type="video" data-thumb="https://ik.imagekit.io/k0qx6odcz/OUTPACED%20CASE%20STUDY.mp4">Outpaced, <em>D&amp;AD 2026 proposal for Monotype x Penguin.</em></a>
+      <a class="more__row" href="proyecto-04.html" data-thumb-type="video" data-thumb="https://ik.imagekit.io/k0qx6odcz/Rodri%CC%81guez-Alfonso-Project_VIDEO-03-3DAnimation-2025.mp4">Primal, <em>3D modeling and animation for New Balance.</em></a>
+      <a class="more__row" href="proyecto-05.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/lcaimagenportf%20(2).jpg">La Casa Amarilla Estudio, <em>art direction, photography and branding.</em></a>
+      <a class="more__row is-current" href="proyecto-06.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png">Todo Encaja, <em>packaging, winner of the ANFACO Design Award 2026.</em></a>
+    </div>
+    <div class="more__thumb"></div>
+  </section>
+
+  <footer class="footer">
+    <div>
+      Alfonso Rodríguez de Rivas —<br />
+      Multimedia &amp; Graphic Designer<br />
+      Based in Madrid, Spain
+    </div>
+    <div>
+      +34 620 139 947<br />
+      <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+      <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer__col--right">
+      ©Alfonso R. de Rivas, 2026<br />
+      Web designed and coded by me.
+      Typefaces: Diatype by Dinamo and Herbik by Daniel Veneklaas.
+    </div>
+  </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

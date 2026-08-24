@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Info — Alfonso R. de Rivas</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <a href="works.html">Works</a>
+      <a href="archive.html">Archive</a>
+      <a href="sound.html">Sound</a>
+      <a href="info.html" class="is-active">Info</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+  <div class="page-fade">
+  <section class="studio">
+    <div class="studio__text">
+      <p>
+        Alfonso is a multimedia designer trained at UDIT Madrid who
+        works across visual identity, 3D production, music composition and
+        web development.
+      </p>
+      <p>
+        He's interested in the point where these disciplines intersect:
+        projects where image, sound and interaction tell the same story.
+        His work has been recognised with the ANFACO Design Award and a
+        selection at the Laus Inbook 2026.
+      </p>
+      <p>
+        Tools: Cinema 4D, Houdini, After Effects, Logic Pro X,
+        HTML/CSS/JS and Three.js.<br />
+        Typefaces used on this site: <a class="u-dotted" href="https://abcdinamo.com" target="_blank" rel="noopener">Diatype</a> by Dinamo,
+        <a class="u-dotted" href="#" target="_blank" rel="noopener">Herbik</a> by Daniel Veneklaas.
+      </p>
+
+      <div class="studio__cols">
+        <div>Madrid,<br />Spain</div>
+        <div>
+          <a class="u-dotted" href="#">Instagram</a><br />
+          <a class="u-dotted" href="#">LinkedIn</a><br />
+          <a class="u-dotted" href="#">Behance</a>
+        </div>
+      </div>
+
+      <div class="studio__cols">
+        <div>
+          <a class="u-dotted" href="mailto:hola@alfonso.com">hola@alfonso.com</a><br />
+          +34 600 000 000
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tarjetas de premios: fijas en pantalla (position:fixed),
+       estrechas — no una columna entera, solo el ancho de una
+       tarjeta. El JS las coloca a la altura de las fotos al
+       cargar y las "acopla" justo encima del footer al bajar. -->
+  <div class="awards" id="awards">
+    <div class="award-card">
+      <div class="award-card__top">
+        <span class="tag">Award (02)</span>
+        <a href="#" class="u-dotted">More &#8599;</a>
+      </div>
+      <p class="award-card__title">Laus Inbook — ADG Laus 2026</p>
+    </div>
+    <div class="award-card">
+      <div class="award-card__top">
+        <span class="tag">Award (01)</span>
+        <a href="#" class="u-dotted">More &#8599;</a>
+      </div>
+      <p class="award-card__title">ANFACO Design Award 2025</p>
+    </div>
+  </div>
+
+  <section class="studio__photos">
+    <div class="ph-block"><img src="img/alfonso-retrato.jpg" alt="Alfonso R. de Rivas" loading="lazy" /></div>
+    <div class="ph-block tall"><img src="img/alfonso-calle.jpg" alt="Alfonso R. de Rivas" loading="lazy" /></div>
+  </section>
+
+  <footer class="footer">
+    <div>
+      Alfonso Rodríguez de Rivas —<br />
+      Multimedia &amp; Graphic Designer<br />
+      Based in Madrid, Spain
+    </div>
+    <div>
+      +34 620 139 947<br />
+      <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+      <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer__col--right">
+      ©Alfonso R. de Rivas, 2026<br />
+      Web designed and coded by me.
+      Typefaces: Diatype by Dinamo and Herbik by Daniel Veneklaas.
+    </div>
+  </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alfonso R. de Rivas — Multimedia & Graphic Designer</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="is-home">
+
+  <!-- Pantalla de carga: solo se anima la primera vez que se
+       entra en la web dentro de la sesión (lo controla js/main.js) -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__inner">
+      <h1 class="preloader__name" id="preloaderName">Alfonso R. de Rivas</h1>
+      <div class="preloader__tagline" id="preloaderTagline">
+        <span data-word="Multimedia"></span>
+        <span data-word="Graphic"></span>
+        <span data-word="Designer"></span>
+        <span data-word="Producer"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-page">
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <a href="works.html">Works</a>
+      <a href="archive.html">Archive</a>
+      <a href="sound.html">Sound</a>
+      <a href="info.html">Info</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+    <!-- GALERÍA CONTINUA: pista duplicada por JS, movida con
+         requestAnimationFrame (deriva lenta + impulso de la rueda
+         o el arrastre). La página no hace scroll: solo se mueve
+         esto. Los nombres aparecen al pasar el cursor (escritorio). -->
+    <main class="carousel" id="carousel">
+      <div class="track" id="track">
+      <a class="slide" href="simbiosis.html">
+        <video id="simbiosisSlideVideo" src="https://ik.imagekit.io/k0qx6odcz/Alfonso_Rodriguez_Spot.2%20(1).mp4" autoplay muted loop playsinline preload="auto"></video>
+        <span class="slide__label">
+          <span class="slide__name">Simbiosis, <em>Cultural mediation</em></span>
+          <span class="slide__cat">Branding · 3D · Music · Web</span>
+        </span>
+      </a>
+      <a class="slide" href="proyecto-anfaco.html">
+        <img src="https://ik.imagekit.io/k0qx6odcz/A1_75972-Portada-WEB.jpg" alt="" loading="lazy" />
+        <span class="slide__label">
+          <span class="slide__name">Specimen, <em>Laus Inbook 2026</em></span>
+          <span class="slide__cat">Editorial</span>
+        </span>
+      </a>
+      <a class="slide" href="proyecto-laus.html">
+        <video src="https://ik.imagekit.io/k0qx6odcz/OUTPACED%20CASE%20STUDY.mp4" autoplay muted loop playsinline preload="auto"></video>
+        <span class="slide__label">
+          <span class="slide__name">Outpaced, <em>D&amp;AD 2026</em></span>
+          <span class="slide__cat">Web Design · Motion · Campaign</span>
+        </span>
+      </a>
+      <a class="slide" href="proyecto-04.html">
+        <video src="https://ik.imagekit.io/k0qx6odcz/Rodri%CC%81guez-Alfonso-Project_VIDEO-03-3DAnimation-2025.mp4" autoplay muted loop playsinline preload="auto"></video>
+        <span class="slide__label">
+          <span class="slide__name">Primal, <em>New Balance</em></span>
+          <span class="slide__cat">3D · Motion</span>
+        </span>
+      </a>
+      <a class="slide" href="proyecto-05.html">
+        <img src="img/lca-carousel.jpg" alt="" loading="lazy" />
+        <span class="slide__label">
+          <span class="slide__name">La Casa Amarilla Estudio, <em>Madrid</em></span>
+          <span class="slide__cat">Art Direction · Photography · Branding</span>
+        </span>
+      </a>
+      <a class="slide" href="proyecto-06.html">
+        <img src="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png" alt="" loading="lazy" />
+        <span class="slide__label">
+          <span class="slide__name">Todo Encaja, <em>ANFACO Award 2026</em></span>
+          <span class="slide__cat">Packaging</span>
+        </span>
+      </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
