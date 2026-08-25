@@ -69,7 +69,7 @@
 }
 
 /* ---------- Reset ---------- */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 html { background: var(--bg); }
 
@@ -232,7 +232,7 @@ body.preload-nav .nav {
   transform: translateY(-16px);
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
-body.preload-nav.is-ready .nav { opacity: 1; transform: translateY(0); }
+body.preload-nav.is-ready .nav { opacity: 1; transform: none; }
 
 .nav__logo {
   display: flex;
@@ -246,6 +246,23 @@ body.preload-nav.is-ready .nav { opacity: 1; transform: translateY(0); }
   align-items: center;
   gap: clamp(12px, 1.8vw, 28px);
 }
+
+/* en escritorio los enlaces se muestran en línea, igual que
+   siempre; la media query de móvil más abajo lo convierte en un
+   panel desplegable oculto por defecto */
+.nav__menu {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.8vw, 28px);
+}
+.nav__menu-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.8vw, 28px);
+}
+/* la fila de contacto/redes del menú a pantalla completa es
+   exclusiva del móvil: en escritorio no hay menú desplegable */
+.nav__menu-foot { display: none; }
 
 /* la sección activa se marca con el mismo gris que las etiquetas
    (misma opacidad sobre --ink), en vez de un asterisco delante */
@@ -283,6 +300,37 @@ body.preload-nav.is-ready .nav { opacity: 1; transform: translateY(0); }
 .carousel-page .nav { margin-bottom: 0; }
 
 /* ============================================================
+   MENÚ HAMBURGUESA — solo existe visualmente en móvil (ver
+   media query más abajo). En escritorio los enlaces se muestran
+   en línea como siempre y el botón de hamburguesa permanece oculto.
+   ============================================================ */
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: inherit; /* los <button> no heredan el color por defecto: sin esto, currentColor salía negro en vez de blanco */
+}
+.nav__burger span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+}
+/* al abrir, las tres rayas se convierten en una X */
+.nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+/* ============================================================
    ETIQUETAS
    ============================================================ */
 /* gris claro: se consigue con opacidad sobre --ink, así queda
@@ -316,7 +364,10 @@ body.preload-nav.is-ready .nav { opacity: 1; transform: translateY(0); }
   margin-top: 1px;
   transition: opacity 0.3s ease;
 }
-.card:hover .card__cats { opacity: 0.4; }
+@media (hover: hover) and (pointer: fine) { .card:hover .card__cats { opacity: 0.4; } }
+/* en pantallas táctiles no existe el hover: se muestran siempre,
+   en vez de quedar ocultas para siempre sin forma de revelarlas */
+@media (hover: none) { .card__cats { opacity: 0.4; } }
 
 /* mismo estilo, pero para las páginas de proyecto individuales:
    siempre visible, no depende de ningún hover (eso era específico
@@ -458,7 +509,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   object-fit: cover;
   transition: transform 0.6s var(--ease);
 }
-.card:hover .card__img img, .card:hover .card__img video { transform: scale(1.06); }
+@media (hover: hover) and (pointer: fine) { .card:hover .card__img img, .card:hover .card__img video { transform: scale(1.06); } }
 
 .card__caption { font-size: var(--fs-serif); margin-top: 6px; }
 .card__caption em { font-style: italic; }
@@ -622,10 +673,10 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   transition: opacity 0.35s var(--ease);
 }
 .more__row.is-current::before,
-.more__row:hover::before { opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .more__row:hover::before { opacity: 1; } }
 
-.more__row:hover { padding-left: 10px; }
-.more__row:not(.is-current):hover { opacity: 0.55; }
+@media (hover: hover) and (pointer: fine) { .more__row:hover { padding-left: 10px; } }
+@media (hover: hover) and (pointer: fine) { .more__row:not(.is-current):hover { opacity: 0.55; } }
 .more__row.is-current { opacity: 1; }
 
 /* vacía por defecto: se rellena con la imagen o vídeo propio de
@@ -673,7 +724,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
    al "chispazo" brusco de que cada archivo remoto aparezca en un
    instante distinto según tarde en descargarse */
 .archive-grid__item.is-loaded { opacity: 1; transform: translateY(0); }
-.archive-grid__item:hover { filter: brightness(0.94); }
+@media (hover: hover) and (pointer: fine) { .archive-grid__item:hover { filter: brightness(0.94); } }
 .archive-grid__item img,
 .archive-grid__item video { width: 100%; display: block; }
 
@@ -758,7 +809,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   transition: opacity 0.3s ease, filter 0.3s ease;
   z-index: 8;
 }
-.lightbox__peek:hover { opacity: 0.75; filter: blur(0.5px); }
+@media (hover: hover) and (pointer: fine) { .lightbox__peek:hover { opacity: 0.75; filter: blur(0.5px); } }
 .lightbox__peek img, .lightbox__peek video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .lightbox__peek--prev { left: var(--pad); }
 .lightbox__peek--next { right: var(--pad); }
@@ -793,7 +844,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   line-height: 1;
   transition: opacity 0.2s ease;
 }
-.lightbox__close:hover { opacity: 0.5; }
+@media (hover: hover) and (pointer: fine) { .lightbox__close:hover { opacity: 0.5; } }
 
 /* cursor de doble flecha (izquierda/derecha) en cualquier zona
    donde hacer clic avance o retroceda: la imagen, y también el
@@ -909,7 +960,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
-.sound-track__play:hover { background: var(--ink); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .sound-track__play:hover { background: var(--ink); color: var(--bg); } }
 
 .sound-track__title {
   font-family: var(--sans);
@@ -976,7 +1027,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
-.sound-track__process:hover { background: var(--ink); color: var(--bg); }
+@media (hover: hover) and (pointer: fine) { .sound-track__process:hover { background: var(--ink); color: var(--bg); } }
 
 /* ============================================================
    VENTANA DE PROCESO — capturas y explicación del flujo de
@@ -1020,7 +1071,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   padding: 8px;
   transition: opacity 0.2s ease;
 }
-.process-modal__close:hover { opacity: 0.5; }
+@media (hover: hover) and (pointer: fine) { .process-modal__close:hover { opacity: 0.5; } }
 
 .process-modal__title {
   font-family: var(--sans);
@@ -1162,7 +1213,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 .footer__col--right { justify-self: end; max-width: 560px; font-size: 12.5px; line-height: 1.55; }
 .footer a { position: relative; }
-.footer a:hover { opacity: 0.55; }
+@media (hover: hover) and (pointer: fine) { .footer a:hover { opacity: 0.55; } }
 
 /* ============================================================
    RESPONSIVE
@@ -1177,6 +1228,37 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 
 @media (max-width: 680px) {
   :root { --fs-serif: 15px; --fs-nav: 15px; }
+  /* la miniatura que aparece al pasar el ratón por "Más proyectos"
+     no tiene sentido en pantallas táctiles (no hay hover de verdad) */
+  .more__thumb { display: none; }
+  /* la hamburguesa y el círculo son iconos, no texto: se alinean
+     al centro en vez de por línea base (que es lo que usa el
+     resto de la nav para el texto), para que siempre queden a la
+     misma altura que el nombre, en cualquier página */
+  .nav { align-items: center; z-index: 950; }
+  /* el logo, la hamburguesa y el círculo son DESCENDIENTES de la
+     propia nav, igual que el menú — así que el z-index de la nav
+     en conjunto no basta para que ganen: cada uno necesita su
+     propio z-index por encima del menú (900) para quedar visible */
+  .nav__logo, .nav__burger, .theme-toggle { position: relative; z-index: 950; }
+
+  /* en móvil, las piezas del carrusel se tocan entre sí, sin
+     espacio en blanco de por medio */
+  .track { gap: 0; }
+
+  /* el círculo de tema no aparece en la home en móvil (el resto
+     de páginas sí lo conservan) */
+  body.is-home .theme-toggle { display: none; }
+
+  /* tabla de Sound: la cabecera de cada pista (número, botón,
+     título) pasa a ir ENCIMA del carril en vez de compartir fila
+     con él — con los 160px fijos de la cabecera no quedaba casi
+     nada de ancho para las barras y la regla, y por eso se veía
+     todo tan apretado y desordenado */
+  .sound-track { grid-template-columns: 1fr; }
+  .sound-track__head { border-right: none; border-bottom: 1px solid var(--line); }
+  .sound-ruler { grid-template-columns: 1fr; }
+  .sound-ruler__spacer { display: none; }
   .works-grid { columns: 1; }
   .archive-grid { columns: 3; }
   .project-media { grid-template-columns: 1fr; }
@@ -1184,8 +1266,119 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   .studio__photos { grid-template-columns: 1fr; }
   .footer { grid-template-columns: 1fr; gap: 22px; }
 
-  /* en móvil el carrusel ocupa toda la pantalla disponible bajo
-     la nav (en vez del 60% con aire arriba que se usa en escritorio) */
+  /* la nav de la home flota fija ENCIMA del carrusel en vez de
+     ocupar su propia fila separada — así el efecto de inversión de
+     color actúa sobre la imagen de verdad, y no queda ninguna
+     franja blanca aparte por encima */
+  .carousel-page .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+    align-items: center; /* el círculo y la hamburguesa no son texto: centrados, no por línea base */
+  }
+  .carousel-page { display: block; }
+  .carousel { height: 100%; margin-top: 0; }
   .track { height: 100%; }
-  .carousel { margin-top: 0; }
+
+  /* Works/Archive/Sound/Info pasan a un menú desplegable; el
+     círculo de tema se queda siempre visible, fuera del menú */
+  .nav__links { gap: 14px; }
+  .nav__burger { display: flex; }
+  .nav__menu {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    flex-direction: column;
+    align-items: flex-start; /* menú alineado a la izquierda */
+    justify-content: space-between;
+    padding: 70px var(--pad) 30px;
+    background: #000;
+    color: #fff;
+    /* fondo sólido y colores normales: el mix-blend-mode de la
+       barra compacta no tiene sentido en un panel a pantalla completa */
+    isolation: isolate;
+    overflow-y: auto;
+    /* misma curva de aceleración que el resto del sitio (el modal
+       de "Ver proceso", la pantalla de carga, etc.): un fundido
+       combinado con un ligero desplazamiento hacia arriba */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease), transform 0.4s var(--ease);
+    pointer-events: none;
+  }
+  .nav__menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* mientras el menú está abierto, la nav (nombre, X, círculo) deja
+     de usar el efecto de inversión de color — ya no hace falta,
+     porque ahora se apoya siempre sobre el mismo fondo negro fijo
+     del menú, así que un blanco normal ya es perfectamente legible;
+     además, sin desactivarlo, ese efecto seguiría aplicándose sobre
+     el propio menú y le cambiaría los colores */
+  body.nav-open .nav { mix-blend-mode: normal; color: #fff; }
+  /* el círculo de tema desaparece mientras el menú está abierto
+     (no tiene sentido verlo detrás/junto a la X), y vuelve a
+     aparecer en la barra en cuanto se cierra */
+  body.nav-open .theme-toggle { display: none; }
+
+  /* enlaces principales: alineados a la izquierda, uno debajo de
+     otro, justo debajo de donde está "Alfonso R. de Rivas" */
+  .nav__menu .nav__menu-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  /* solo los enlaces principales (Works, Archive...) llevan este
+     tamaño grande — antes ".nav__menu a" también alcanzaba, sin
+     querer, a Instagram/LinkedIn de la fila de abajo, por eso se
+     veían igual de grandes */
+  .nav__menu-links a {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(22px, 7vw, 30px);
+    letter-spacing: -0.02em;
+    padding: 6px 0;
+    color: #fff;
+  }
+
+  /* misma información que el pie de página, pero con su misma
+     doble alineación: nombre/contacto pegados a la izquierda,
+     copyright y créditos pegados a la derecha */
+  .nav__menu-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    width: 100%;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    opacity: 0.7;
+  }
+  .nav__menu-foot .nav__menu-foot-left { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+  .nav__menu-foot .nav__menu-foot-right { text-align: right; }
+  .nav__menu-foot a {
+    color: inherit;
+    display: inline-block;
+    /* el área que se puede tocar es mayor que el propio texto,
+       pero el margen negativo compensa visualmente para que las
+       líneas no se vean más separadas de lo que estaban */
+    padding: 8px 0;
+    margin: -8px 0;
+  }
+
+  /* con el menú abierto, la página de detrás no hace scroll */
+  body.nav-open { overflow: hidden; height: 100vh; }
 }

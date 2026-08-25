@@ -798,3 +798,53 @@ if (awards) {
     });
   });
 })();
+
+/* ---------- 11. Menú hamburguesa (móvil) ---------- */
+(function () {
+  const burger = document.getElementById('navBurger');
+  const menu = document.getElementById('navMenu');
+  if (!burger || !menu) return;
+
+  // "congela" la página en su sitio exacto (no solo impide
+  // desplazarse más, como hacía overflow:hidden por sí solo) —
+  // evita cualquier comportamiento raro de la nav (position:sticky
+  // en las páginas que no son la home) al abrir el menú después de
+  // haber hecho scroll
+  let savedScrollY = 0;
+
+  function closeMenu() {
+    menu.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollY);
+  }
+  function openMenu() {
+    savedScrollY = window.scrollY;
+    menu.classList.add('is-open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('nav-open');
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.width = '100%';
+  }
+
+  burger.addEventListener('click', () => {
+    const isOpen = burger.getAttribute('aria-expanded') === 'true';
+    if (isOpen) closeMenu(); else openMenu();
+  });
+
+  // clic fuera del menú lo cierra
+  document.addEventListener('click', (e) => {
+    if (!menu.classList.contains('is-open')) return;
+    if (menu.contains(e.target) || burger.contains(e.target)) return;
+    closeMenu();
+  });
+
+  // Escape lo cierra
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+})();
