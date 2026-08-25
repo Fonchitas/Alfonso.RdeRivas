@@ -112,7 +112,7 @@ body.page-leave .carousel {
 
 /* la home no hace scroll: es una pantalla fija con la galería
    moviéndose sola dentro */
-body.is-home { height: 100svh; overflow: hidden; }
+body.is-home { height: 100svh; height: 100dvh; overflow: hidden; }
 
 /* ============================================================
    PANTALLA DE CARGA — solo en la home, solo una vez por sesión.
@@ -393,6 +393,7 @@ body.preload-nav.is-ready .nav { opacity: 1; transform: none; }
    ============================================================ */
 .carousel-page {
   height: 100svh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -960,6 +961,13 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
+/* icono dibujado en SVG en vez de un carácter de texto (▶): así
+   se ve exactamente igual en cualquier móvil, sin depender de si
+   ese símbolo está bien soportado por la fuente del sistema */
+.play-icon { width: 9px; height: 9px; fill: currentColor; }
+.play-icon__bars { display: none; }
+.sound-track__play.is-playing .play-icon__tri { display: none; }
+.sound-track__play.is-playing .play-icon__bars { display: block; }
 @media (hover: hover) and (pointer: fine) { .sound-track__play:hover { background: var(--ink); color: var(--bg); } }
 
 .sound-track__title {
@@ -1368,7 +1376,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
     opacity: 0.7;
   }
   .nav__menu-foot .nav__menu-foot-left { display: flex; flex-direction: column; gap: 10px; text-align: left; }
-  .nav__menu-foot .nav__menu-foot-right { text-align: right; }
+  .nav__menu-foot .nav__menu-foot-right { display: flex; flex-direction: column; gap: 10px; text-align: right; }
   .nav__menu-foot a {
     color: inherit;
     display: inline-block;
@@ -1380,5 +1388,5 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   }
 
   /* con el menú abierto, la página de detrás no hace scroll */
-  body.nav-open { overflow: hidden; height: 100vh; }
+  body.nav-open { overflow: hidden; height: 100vh; height: 100dvh; }
 }

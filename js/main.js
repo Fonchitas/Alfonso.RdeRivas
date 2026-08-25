@@ -279,7 +279,9 @@ if (carousel && track) {
   // arrastre directo (ratón o dedo)
   let isPressed = false;
   let dragLocked = false;
+  let dragAxis = 'x';
   let startX = 0, startY = 0, startXAt = 0;
+  const isMobileCarousel = () => window.matchMedia('(max-width: 680px)').matches;
 
   carousel.addEventListener('pointerdown', (e) => {
     isPressed = true;
@@ -296,8 +298,22 @@ if (carousel && track) {
     const dy = e.clientY - startY;
 
     if (!dragLocked) {
-      if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
+      // en móvil, el gesto que mueve el carrusel es vertical (de
+      // abajo arriba o al revés) en vez de horizontal — así no
+      // compite con nada y se siente natural con una sola mano
+      if (isMobileCarousel()) {
+        if (Math.abs(dy) > 6 && Math.abs(dy) >= Math.abs(dx)) {
+          dragLocked = true;
+          dragAxis = 'y';
+          dragging = true;
+          carousel.classList.add('is-dragging');
+        } else if (Math.abs(dx) > 6) {
+          isPressed = false;
+          return;
+        }
+      } else if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
         dragLocked = true;
+        dragAxis = 'x';
         dragging = true;
         carousel.classList.add('is-dragging');
       } else if (Math.abs(dy) > 6) {
@@ -309,7 +325,9 @@ if (carousel && track) {
     if (dragLocked) {
       e.preventDefault();
       moved = true;
-      x = startXAt + dx;
+      // deslizar el dedo de abajo arriba (dy negativo) avanza la
+      // galería, igual que hacer scroll hacia arriba con la rueda
+      x = dragAxis === 'y' ? startXAt - dy : startXAt + dx;
     }
   }, { passive: false });
 
@@ -767,7 +785,7 @@ if (awards) {
       // ya estaba sonando esta misma pista: pausar
       if (currentButton === button && currentAudio && !currentAudio.paused) {
         currentAudio.pause();
-        button.textContent = '▶';
+        button.classList.remove('is-playing');
         stopVisualizer(button);
         return;
       }
@@ -775,7 +793,7 @@ if (awards) {
       // había otra pista sonando: pararla y devolverle su icono
       if (currentButton && currentButton !== button) {
         currentAudio.pause();
-        currentButton.textContent = '▶';
+        currentButton.classList.remove('is-playing');
         stopVisualizer(currentButton);
       }
 
@@ -783,7 +801,7 @@ if (awards) {
         currentAudio = new Audio(src);
         currentAudio.addEventListener('ended', () => {
           currentAudio.currentTime = 0;
-          button.textContent = '▶';
+          button.classList.remove('is-playing');
           stopVisualizer(button);
         });
         currentAudio.addEventListener('error', () => {
@@ -793,7 +811,7 @@ if (awards) {
 
       currentButton = button;
       currentAudio.play().catch((err) => console.error('Reproducción bloqueada:', err));
-      button.textContent = '⏸';
+      button.classList.add('is-playing');
       animateBars(currentAudio, bars);
     });
   });
