@@ -279,7 +279,6 @@ if (carousel && track) {
   // arrastre directo (ratón o dedo)
   let isPressed = false;
   let dragLocked = false;
-  let dragAxis = 'x';
   let startX = 0, startY = 0, startXAt = 0;
   const isMobileCarousel = () => window.matchMedia('(max-width: 680px)').matches;
 
@@ -296,27 +295,20 @@ if (carousel && track) {
     if (!isPressed) return;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
+    const mobile = isMobileCarousel();
 
     if (!dragLocked) {
-      // en móvil, el gesto que mueve el carrusel es vertical (de
-      // abajo arriba o al revés) en vez de horizontal — así no
-      // compite con nada y se siente natural con una sola mano
-      if (isMobileCarousel()) {
-        if (Math.abs(dy) > 6 && Math.abs(dy) >= Math.abs(dx)) {
-          dragLocked = true;
-          dragAxis = 'y';
-          dragging = true;
-          carousel.classList.add('is-dragging');
-        } else if (Math.abs(dx) > 6) {
-          isPressed = false;
-          return;
-        }
-      } else if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
+      // en móvil, cualquiera de los dos gestos (horizontal o
+      // vertical) activa el arrastre — no hace falta elegir uno;
+      // en escritorio se mantiene solo el horizontal, como siempre
+      const threshold = mobile
+        ? Math.abs(dx) > 6 || Math.abs(dy) > 6
+        : Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy);
+      if (threshold) {
         dragLocked = true;
-        dragAxis = 'x';
         dragging = true;
         carousel.classList.add('is-dragging');
-      } else if (Math.abs(dy) > 6) {
+      } else if (!mobile && Math.abs(dy) > 6) {
         isPressed = false;
         return;
       }
@@ -325,9 +317,11 @@ if (carousel && track) {
     if (dragLocked) {
       e.preventDefault();
       moved = true;
-      // deslizar el dedo de abajo arriba (dy negativo) avanza la
-      // galería, igual que hacer scroll hacia arriba con la rueda
-      x = dragAxis === 'y' ? startXAt - dy : startXAt + dx;
+      // mismo sentido en los dos ejes: arrastrar hacia la
+      // izquierda O deslizar el dedo de abajo arriba avanzan la
+      // galería de derecha a izquierda (comprobado con datos
+      // reales cuál de los dos signos era el correcto)
+      x = mobile ? startXAt + dx + dy : startXAt + dx;
     }
   }, { passive: false });
 

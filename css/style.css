@@ -1288,7 +1288,9 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   }
   .carousel-page { display: block; }
   .carousel { height: 100%; margin-top: 0; }
-  .track { height: 100%; }
+  /* un poco más de la mitad de la pantalla, no toda — deja aire
+     en blanco por encima (las piezas se posan pegadas abajo) */
+  .track { height: 58%; }
 
   /* Works/Archive/Sound/Info pasan a un menú desplegable; el
      círculo de tema se queda siempre visible, fuera del menú */
