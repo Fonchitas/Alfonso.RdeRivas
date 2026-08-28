@@ -60,7 +60,7 @@
   <div class="page-fade">
   <!-- PORTADA: lo primero que se ve al entrar al proyecto -->
   <section class="project-cover">
-    <div class="ph-block full"><video src="https://ik.imagekit.io/k0qx6odcz/Alfonso_Rodriguez_Spot.2%20(1).mp4" autoplay muted loop playsinline preload="auto"></video></div>
+    <div class="ph-block full"><img src="img/simbiosis-cover.jpg" alt="Simbiosis" loading="lazy" /></div>
   </section>
 
   <!-- Dos columnas: título grande a la izquierda, texto + ficha
@@ -88,10 +88,71 @@
 
   <!-- Resto de imágenes del proyecto -->
   <section class="project-media">
-    <div class="ph-block"></div>
-    <div class="ph-block"></div>
-    <div class="ph-block tall"></div>
-    <div class="ph-block tall"></div>
+    <!-- 1. Spot 1 (66.7s), sola, a máxima calidad posible -->
+    <div class="ph-block full media-vimeo">
+      <video src="video/simbiosis-spot-1.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Vídeo de 11.6s (con zoom) + foto del libro (close-up) -->
+    <div class="ph-block"><video class="zoom" src="video/simbiosis-silent-1.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+    <div class="ph-block"><img src="img/simbiosis-media-1.jpg" alt="" loading="lazy" /></div>
+
+    <!-- 3. Spot 2 (70.6s), sola, a ancho completo igual que Spot 1 -->
+    <div class="ph-block full media-vimeo">
+      <video src="video/simbiosis-spot-2.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. Texto + vídeo nuevo -->
+    <div class="media-text">
+      Cada secuencia responde a una colaboración concreta — traducir una
+      pieza física a movimiento, sonido y color sin perder la textura
+      del original.
+    </div>
+    <div class="ph-block"><video src="video/simbiosis-silent-3.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+
+    <!-- 5. Cuatro juntos: vídeo 6.6s + prado verde / mar (3D) + vídeo nuevo (Casestudy 6) -->
+    <div class="ph-block"><video class="zoom" src="video/simbiosis-sound-2.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+    <div class="ph-block"><img src="img/simbiosis-media-2.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block"><img src="img/simbiosis-media-3.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block"><video class="zoom" src="video/simbiosis-silent-2.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+
+    <!-- 6. Vídeo de 35s (hero, con sonido), al final, solo -->
+    <div class="ph-block full media-vimeo">
+      <video src="video/simbiosis-sound-1.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
   </section>
 
   <section class="more">

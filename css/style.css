@@ -599,14 +599,98 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .project-media {
   padding: 60px var(--pad) 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--pad);
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  align-items: start;
 }
-.project-media .ph-block { background: var(--ph); aspect-ratio: 16 / 10; }
-.project-media .ph-block.full { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
-.project-media .ph-block.tall { aspect-ratio: 4 / 5; }
+.project-media .full { grid-column: 1 / -1; }
+/* bloque de texto que hace pareja con un vídeo en la misma fila */
+.project-media .media-text {
+  display: flex;
+  align-items: center;
+  font-family: var(--serif);
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.55;
+  color: var(--ink);
+  padding-right: 10%;
+  grid-column: span 3;
+}
+/* hueco en blanco a propósito: mismo tamaño que una pieza normal,
+   pero sin fondo ni contenido — espacio de verdad, no una caja gris */
+.project-media .media-empty { aspect-ratio: 3 / 2; background: none; grid-column: span 3; }
+
+/* vídeos con música: se reproducen solos desde el principio — al
+   pasar el ratón por encima (o si están en pausa) aparece, abajo,
+   un botón de pausa/play y una barra de progreso al estilo Vimeo,
+   sobre la que se puede pinchar para avanzar o retroceder */
+.media-vimeo { position: relative; }
+.media-vimeo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media-vimeo__controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 14px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.media-vimeo:hover .media-vimeo__controls,
+.media-vimeo.is-paused .media-vimeo__controls { opacity: 1; }
+.media-vimeo__toggle {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.media-vimeo__toggle svg { width: 14px; height: 14px; fill: #fff; }
+.media-vimeo__icon-play { display: none; }
+.media-vimeo.is-paused .media-vimeo__icon-pause { display: none; }
+.media-vimeo.is-paused .media-vimeo__icon-play { display: block; }
+.media-vimeo__bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.media-vimeo__fill { height: 100%; width: 0%; background: #fff; border-radius: 999px; }
+.media-vimeo__volume {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.media-vimeo__volume svg { width: 15px; height: 15px; fill: #fff; }
+.media-vimeo__icon-muted { display: none; }
+.media-vimeo.is-muted .media-vimeo__icon-unmuted { display: none; }
+.media-vimeo.is-muted .media-vimeo__icon-muted { display: block; }
+
+.project-media .ph-block { background: var(--ph); overflow: hidden; aspect-ratio: 3 / 2; grid-column: span 3; }
+.project-media .ph-block.full { aspect-ratio: 16 / 9; grid-column: 1 / -1; }
+.project-media .ph-block.third { grid-column: span 2; }
 .project-media .ph-block img,
 .project-media .ph-block video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* estos tres vídeos concretos quedaban con demasiado aire dentro
+   de su marco recortado — un acercamiento extra para que el
+   encuadre se sienta más cerrado y con más presencia */
+.project-media .ph-block video.zoom { transform: scale(1.25); transform-origin: center; }
+.project-media .ph-block video.zoom-more { transform: scale(1.55); }
 
 /* ============================================================
    REVELADO AL HACER SCROLL — las tarjetas de Works, las imágenes
@@ -1270,6 +1354,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   .works-grid { columns: 1; }
   .archive-grid { columns: 3; }
   .project-media { grid-template-columns: 1fr; }
+  .project-media .media-empty { display: none; }
   .studio__cols { grid-template-columns: 1fr; }
   .studio__photos { grid-template-columns: 1fr; }
   .footer { grid-template-columns: 1fr; gap: 22px; }

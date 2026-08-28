@@ -60,7 +60,7 @@
   <div class="page-fade">
   <!-- PORTADA: lo primero que se ve al entrar al proyecto -->
   <section class="project-cover">
-    <div class="ph-block full"><video src="https://ik.imagekit.io/k0qx6odcz/Rodri%CC%81guez-Alfonso-Project_VIDEO-03-3DAnimation-2025.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+    <div class="ph-block full"><img src="img/primal-cover.png" alt="" loading="lazy" /></div>
   </section>
 
   <!-- Dos columnas: título grande a la izquierda, texto + ficha
@@ -84,10 +84,37 @@
 
   <!-- Resto de imágenes del proyecto -->
   <section class="project-media">
-    <div class="ph-block"></div>
-    <div class="ph-block"></div>
-    <div class="ph-block tall"></div>
-    <div class="ph-block tall"></div>
+    <!-- el vídeo, a ancho completo, con audio y controles -->
+    <div class="ph-block full media-vimeo" style="aspect-ratio: 1600 / 900;">
+      <video src="video/primal-hero.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- pareja -->
+    <div class="ph-block" style="aspect-ratio: 1800 / 1010;"><img src="img/primal-1.png" alt="" loading="lazy" /></div>
+    <div class="ph-block" style="aspect-ratio: 1800 / 1010;"><img src="img/primal-2.png" alt="" loading="lazy" /></div>
+
+    <!-- trío -->
+    <div class="ph-block third" style="aspect-ratio: 1800 / 1010;"><img src="img/primal-4.png" alt="" loading="lazy" /></div>
+    <div class="ph-block third" style="aspect-ratio: 1800 / 1009;"><img src="img/primal-5.png" alt="" loading="lazy" /></div>
+    <div class="ph-block third" style="aspect-ratio: 1456 / 816;"><img src="img/primal-7.png" alt="" loading="lazy" /></div>
+
+    <!-- pieza grande -->
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1011;"><img src="img/primal-3.png" alt="" loading="lazy" /></div>
+
+    <!-- pareja final -->
+    <div class="ph-block" style="aspect-ratio: 1628 / 914;"><img src="img/primal-6.png" alt="" loading="lazy" /></div>
+    <div class="ph-block" style="aspect-ratio: 1800 / 1012;"><img src="img/primal-8.png" alt="" loading="lazy" /></div>
   </section>
 
   <section class="more">

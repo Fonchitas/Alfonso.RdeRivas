@@ -860,3 +860,232 @@ if (awards) {
     if (e.key === 'Escape') closeMenu();
   });
 })();
+
+/* ---------- 12. Arreglo del bucle de vídeo en Safari ---------- */
+/* Safari tiene un fallo conocido con este tipo de vídeos (sobre
+   todo servidos desde otro dominio, como los de ImageKit en este
+   sitio): se queda congelado en el último fotograma en vez de
+   volver a empezar. video.load() lo arregla de verdad, pero tarda
+   un instante en completarse — para que ese instante no se note,
+   capturo el último fotograma en un lienzo fijo y lo superpongo
+   mientras se recarga, así nunca se ve ni el fondo gris de la
+   pieza ni un hueco en blanco. (Se probó también a duplicar el
+   vídeo para tener siempre una copia lista de antemano, pero
+   interfería con el cálculo de tamaño del carrusel — se descartó
+   por dar más problemas de los que resolvía.) */
+document.querySelectorAll('video[loop]').forEach((video) => {
+  video.loop = false; // el bucle pasa a estar controlado enteramente por este código
+  const REWIND_MARGIN = 0.15; // segundos antes del final en los que se reinicia
+
+  // el fotograma congelado que se superpone durante la recarga
+  // necesita que su contenedor sea un punto de referencia de
+  // posición — en el carrusel ya lo es, pero en Works, Archive y
+  // las páginas de proyecto no, así que se lo añadimos si hace falta
+  const parent = video.parentElement;
+  if (parent && getComputedStyle(parent).position === 'static') {
+    parent.style.position = 'relative';
+  }
+
+  let restarting = false;
+
+  function restart() {
+    if (restarting) return; // evita que se dispare más de una vez a la vez
+    restarting = true;
+
+    // video.load() resetea el vídeo momentáneamente sin
+    // dimensiones (hasta que vuelve a leer sus metadatos) — si el
+    // ancho de esta pieza depende de su tamaño real (como en el
+    // carrusel), ese instante sin tamaño hace que todo se
+    // recalcule y salte. Fijamos el ancho actual justo antes de
+    // recargar, así no cambia nada visualmente mientras tanto
+    const width = video.getBoundingClientRect().width;
+    if (width > 0) video.style.width = `${width}px`;
+    video.addEventListener('loadedmetadata', () => {
+      video.style.width = '';
+    }, { once: true });
+
+    // mientras se recarga, el vídeo deja de pintar nada durante un
+    // instante y se asoma el fondo gris de la pieza — para taparlo,
+    // capturo el último fotograma en un lienzo fijo y lo superpongo
+    let freezeFrame = null;
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.style.cssText = 'position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none;';
+      video.insertAdjacentElement('afterend', canvas);
+      freezeFrame = canvas;
+    } catch (e) {
+      // si el navegador no deja capturar el fotograma (p. ej. por
+      // origen cruzado), seguimos sin el fotograma congelado
+    }
+    function removeFreezeFrame() {
+      if (freezeFrame && freezeFrame.parentElement) freezeFrame.remove();
+      restarting = false;
+    }
+
+    video.load();
+    video.play()
+      .then(removeFreezeFrame)
+      .catch(removeFreezeFrame);
+    // red de seguridad: si "play" no llega a resolver ni fallar
+    // por lo que sea, el fotograma congelado no se queda para siempre
+    setTimeout(removeFreezeFrame, 1500);
+  }
+
+  video.addEventListener('timeupdate', () => {
+    if (video.duration && video.currentTime >= video.duration - REWIND_MARGIN) {
+      restart();
+    }
+  });
+  video.addEventListener('ended', restart);
+
+  // vigilante: si el vídeo debería estar reproduciéndose pero su
+  // posición lleva más de 1 segundo sin avanzar (señal de que se
+  // ha quedado atascado de verdad, en vez de simplemente en pausa),
+  // se fuerza el reinicio
+  let lastTime = -1;
+  let stuckSince = null;
+  setInterval(() => {
+    if (video.paused || video.seeking) { stuckSince = null; return; }
+    if (video.currentTime === lastTime) {
+      if (stuckSince === null) stuckSince = Date.now();
+      else if (Date.now() - stuckSince > 1000) {
+        stuckSince = null;
+        restart();
+      }
+    } else {
+      stuckSince = null;
+    }
+    lastTime = video.currentTime;
+  }, 500);
+});
+
+/* ---------- 13. Vídeos con música dentro de un proyecto (estilo Vimeo) ---------- */
+/* a diferencia de los vídeos silenciosos del sitio (que arrancan
+   solos, en bucle y sin sonido), estos llevan su propia banda
+   sonora y se reproducen solos desde el principio, sin que haga
+   falta pulsar nada — los controles (pausa, volumen y barra de
+   progreso) solo aparecen al pasar el ratón por encima, igual que
+   en Vimeo.
+
+   Para que el sonido nunca se solape entre varios vídeos a la vez:
+   1) solo puede sonar uno cada vez — en cuanto uno empieza a
+      reproducirse, cualquier otro que estuviera sonando se pausa;
+   2) en cuanto un vídeo deja de verse en pantalla (al hacer
+      scroll), se pausa solo; si vuelve a aparecer más tarde, se
+      reanuda solo — así nunca queda uno sonando "a tus espaldas"
+      mientras miras otra cosa más abajo.
+
+   Sobre el sonido al arrancar: los navegadores no permiten que un
+   vídeo empiece a sonar automáticamente sin que la persona haya
+   interactuado antes con la página — es una restricción de
+   seguridad del propio navegador, no algo que se pueda saltar
+   desde el código. Así que el vídeo intenta arrancar CON sonido
+   de entrada; si el navegador lo bloquea, arranca en silencio
+   igualmente (para que el movimiento nunca se detenga) y basta con
+   pulsar el botón de volumen para activarlo a mano. */
+(function () {
+  const items = Array.from(document.querySelectorAll('.media-vimeo'));
+  if (!items.length) return;
+
+  let currentlyPlaying = null; // solo un vídeo suena a la vez
+
+  items.forEach((item) => {
+    const video = item.querySelector('video');
+    const toggle = item.querySelector('.media-vimeo__toggle');
+    const volumeBtn = item.querySelector('.media-vimeo__volume');
+    const bar = item.querySelector('.media-vimeo__bar');
+    const fill = item.querySelector('.media-vimeo__fill');
+    if (!video || !toggle || !bar || !fill || !volumeBtn) return;
+
+    let userPaused = false; // true si la persona lo paró a propósito (no por scroll)
+    let hasAttemptedSound = false;
+
+    function attemptPlay() {
+      if (!hasAttemptedSound) {
+        // primer intento de verdad, y solo una vez: con sonido
+        hasAttemptedSound = true;
+        video.muted = false;
+        video.play().catch(() => {
+          // el navegador lo ha bloqueado por no haber interacción
+          // previa: arranca en silencio para que al menos se mueva
+          video.muted = true;
+          video.play().catch(() => { /* algunos navegadores bloquean incluso el autoplay silencioso */ });
+        });
+      } else {
+        // las siguientes veces (al volver a aparecer en pantalla)
+        // se respeta el estado de silencio que ya tuviera
+        video.play().catch(() => {});
+      }
+    }
+    // ojo: no se llama aquí todavía — solo arranca cuando el vídeo
+    // entra de verdad en la pantalla (ver el IntersectionObserver
+    // más abajo), para que los que están más abajo en la página no
+    // empiecen a sonar antes de que llegues a verlos
+
+    function syncClasses() {
+      item.classList.toggle('is-paused', video.paused);
+      item.classList.toggle('is-muted', video.muted);
+    }
+    video.addEventListener('play', () => {
+      syncClasses();
+      // que suene este pausa cualquier otro que estuviera sonando
+      if (currentlyPlaying && currentlyPlaying !== video) {
+        currentlyPlaying.pause();
+      }
+      currentlyPlaying = video;
+    });
+    video.addEventListener('pause', syncClasses);
+    video.addEventListener('volumechange', syncClasses);
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userPaused = !video.paused;
+      if (video.paused) video.play(); else video.pause();
+    });
+    video.addEventListener('click', () => {
+      userPaused = !video.paused;
+      if (video.paused) video.play(); else video.pause();
+    });
+    volumeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+    });
+
+    video.addEventListener('timeupdate', () => {
+      if (video.duration) fill.style.width = `${(video.currentTime / video.duration) * 100}%`;
+    });
+
+    bar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!video.duration) return;
+      const rect = bar.getBoundingClientRect();
+      const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      video.currentTime = pct * video.duration;
+    });
+
+    // bucle simple: al llegar al final, vuelve a empezar (estos son
+    // mucho más largos que los vídeos cortos del resto del sitio,
+    // así que aunque se diera el mismo fallo de Safari con el
+    // bucle, se notaría con mucha menos frecuencia)
+    video.addEventListener('ended', () => {
+      video.currentTime = 0;
+      video.play().catch(() => { /* el navegador puede bloquear el play si aún no hay interacción */ });
+    });
+
+    // se pausa solo al salir de la pantalla, y se reanuda solo al
+    // volver a aparecer — pero solo si nadie lo había pausado a mano
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!userPaused) attemptPlay();
+        } else if (!video.paused) {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.35 });
+    observer.observe(item);
+  });
+})();
