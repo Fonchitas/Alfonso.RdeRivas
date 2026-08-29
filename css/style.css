@@ -532,6 +532,10 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 .project-cover .ph-block.full img,
 .project-cover .ph-block.full video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* portadas concretas que deben mostrarse enteras, sin recortar
+   ni forzar ninguna proporción — el tamaño lo decide la propia imagen */
+.project-cover .ph-block.full.natural { aspect-ratio: auto; }
+.project-cover .ph-block.full.natural img { height: auto; object-fit: contain; }
 
 /* dos columnas: título grande a la izquierda, texto + ficha
    técnica a la derecha — como una hoja de créditos editorial */
@@ -599,7 +603,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .project-media {
   padding: 60px var(--pad) 0;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   gap: 6px;
   align-items: start;
 }
@@ -613,7 +617,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   line-height: 1.55;
   color: var(--ink);
   padding-right: 10%;
-  grid-column: span 3;
+  grid-column: span 6;
 }
 /* hueco en blanco a propósito: mismo tamaño que una pieza normal,
    pero sin fondo ni contenido — espacio de verdad, no una caja gris */
@@ -681,9 +685,28 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .media-vimeo.is-muted .media-vimeo__icon-unmuted { display: none; }
 .media-vimeo.is-muted .media-vimeo__icon-muted { display: block; }
 
-.project-media .ph-block { background: var(--ph); overflow: hidden; aspect-ratio: 3 / 2; grid-column: span 3; }
+.project-media .ph-block { background: var(--ph); overflow: hidden; aspect-ratio: 3 / 2; grid-column: span 6; }
+.project-media .ph-block.vert { aspect-ratio: 2 / 3; }
+/* foto protagonista: una vertical sola, centrada y a un tamaño
+   contenido, en vez de estirada a todo el ancho — el respiro
+   editorial que separa los bloques de fotos */
+.project-media .ph-block.feature {
+  grid-column: 1 / -1;
+  background: none;
+  aspect-ratio: 2 / 3;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.project-media .ph-block.feature img,
+.project-media .ph-block.feature video { width: 100%; height: 100%; object-fit: cover; }
 .project-media .ph-block.full { aspect-ratio: 16 / 9; grid-column: 1 / -1; }
-.project-media .ph-block.third { grid-column: span 2; }
+.project-media .ph-block.third { grid-column: span 4; }
+.project-media .ph-block.quarter { grid-column: span 3; }
+/* piezas transparentes (como los mockups de móvil): sin fondo
+   gris ni recorte, se apoyan directamente sobre el fondo de la
+   propia web (blanco o negro según el modo) */
+.project-media .ph-block.transparent { background: none; aspect-ratio: auto; overflow: visible; }
+.project-media .ph-block.transparent img { width: 100%; height: auto; object-fit: contain; }
 .project-media .ph-block img,
 .project-media .ph-block video { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* estos tres vídeos concretos quedaban con demasiado aire dentro
@@ -971,70 +994,73 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
    añade el hueco antes de la sesión de abajo */
 .sound-hero { margin-bottom: clamp(24px, 4vh, 40px); padding-top: var(--content-top); }
 
-/* sesión: el marco que agrupa la regla y las pistas, con una
-   retícula vertical muy tenue de fondo, como el timeline de un
-   secuenciador */
+/* sesión: el marco que agrupa la cabecera y las pistas — límpio,
+   sin retícula de fondo, como una tabla editorial */
 .sound-session {
   margin: 0 var(--pad) 30px;
-  border: 1px solid var(--line);
+  border-top: 1px solid var(--ink);
 }
 
-/* regla de tiempo: misma estructura de columnas (160px + resto)
-   que cada pista de abajo, para que las líneas verticales caigan
-   exactamente en el mismo sitio en toda la tabla */
+/* cabecera de columna: sustituye a la antigua regla de compases
+   (que no representaba nada real) por una fila de título de tabla,
+   clara y discreta */
 .sound-ruler {
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 270px 1fr;
   border-bottom: 1px solid var(--line);
 }
 .sound-ruler__spacer { border-right: 1px solid var(--line); }
 .sound-ruler__marks {
   display: flex;
-  padding: 8px 14px; /* mismo padding horizontal que .sound-track__lane */
-  background-image: repeating-linear-gradient(
-    to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12.5%
-  );
-  background-position: 0 0; /* mismo origen que .sound-track__lane */
+  align-items: center;
+  padding: 10px 18px;
 }
 .sound-ruler__marks span {
-  flex: 1;
   font-family: var(--sans);
   font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  opacity: 0.4;
-  /* el número queda pegado justo a la derecha de su línea */
-  padding-left: 4px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.35;
 }
+.sound-ruler__marks span:first-child { opacity: 0.35; }
+.sound-ruler__marks span:not(:first-child) { display: none; }
 
 .sound-track {
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 270px 1fr;
   border-bottom: 1px solid var(--line);
+  transition: background 0.2s ease;
 }
 .sound-track:last-child { border-bottom: none; }
+@media (hover: hover) and (pointer: fine) {
+  .sound-track:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+}
 
-/* cabecera de la pista, como el canal de un mezclador */
+/* cabecera de la pista: número de catálogo, play, título en serif
+   (mismo lenguaje editorial que el resto del site) */
 .sound-track__head {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 12px;
+  gap: 14px;
+  padding: 20px 18px;
   border-right: 1px solid var(--line);
 }
 .sound-track__index {
   font-family: var(--sans);
   font-weight: 700;
-  font-size: var(--fs-tag);
-  opacity: 0.4;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  opacity: 0.3;
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 .sound-track__play {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
-  border-radius: 3px;
-  border: 1px solid var(--line);
+  border-radius: 50%;
+  border: 1px solid var(--ink);
   background: none;
   display: flex;
   align-items: center;
@@ -1045,81 +1071,80 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
-/* icono dibujado en SVG en vez de un carácter de texto (▶): así
-   se ve exactamente igual en cualquier móvil, sin depender de si
-   ese símbolo está bien soportado por la fuente del sistema */
-.play-icon { width: 9px; height: 9px; fill: currentColor; }
+.play-icon { width: 10px; height: 10px; fill: currentColor; }
 .play-icon__bars { display: none; }
 .sound-track__play.is-playing .play-icon__tri { display: none; }
 .sound-track__play.is-playing .play-icon__bars { display: block; }
 @media (hover: hover) and (pointer: fine) { .sound-track__play:hover { background: var(--ink); color: var(--bg); } }
 
 .sound-track__title {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: -0.01em;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  letter-spacing: -0.005em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* carril de la pista: forma de onda + línea de datos técnicos,
-   como una región de audio dentro del secuenciador */
+/* carril de la pista: forma de onda + datos técnicos como
+   etiquetas discretas, sin retícula de fondo */
 .sound-track__lane {
   position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 14px;
-  background-image: repeating-linear-gradient(
-    to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12.5%
-  );
-  background-position: 0 0;
-  opacity: 1;
+  align-items: center;
+  gap: 22px;
+  padding: 16px 18px;
 }
 
 .sound-track__wave {
   display: flex;
   align-items: center;
-  gap: 2px;
-  height: 26px;
+  gap: 2.5px;
+  height: 22px;
+  flex: 1;
+  min-width: 0;
+  max-width: 260px;
 }
 .sound-track__wave span {
   flex: 1;
-  background: var(--line);
-  opacity: 0.55;
+  background: var(--ink);
+  opacity: 0.25;
   border-radius: 1px;
+  min-width: 1.5px;
 }
 
 .sound-track__meta {
   font-family: var(--sans);
   font-weight: 700;
   font-size: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   opacity: 0.4;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-/* botón "Ver proceso": discreto, a la derecha del carril */
+/* botón "Ver proceso": enlace discreto con flecha, mismo lenguaje
+   que los "More ↗" del resto del site en vez de una píldora */
 .sound-track__process {
   margin-left: auto;
   flex-shrink: 0;
   background: none;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 12px;
+  border: none;
+  padding: 0;
   font-family: var(--sans);
   font-weight: 700;
   font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink);
+  opacity: 0.6;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
-@media (hover: hover) and (pointer: fine) { .sound-track__process:hover { background: var(--ink); color: var(--bg); } }
+.sound-track__process::after { content: ' ↗'; }
+@media (hover: hover) and (pointer: fine) { .sound-track__process:hover { opacity: 1; } }
 
 /* ============================================================
    VENTANA DE PROCESO — capturas y explicación del flujo de

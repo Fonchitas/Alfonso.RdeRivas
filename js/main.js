@@ -533,21 +533,21 @@ if (processButtons.length && processModal) {
       ],
     },
     {
-      title: 'Estudio 01',
+      title: 'Showertime',
       subtitle: 'Original composition',
       steps: [
-        ['Rhythmic sketch', 'First percussion and bass idea in Logic Pro X, as a base for the rest of the composition.'],
-        ['Melodic development', 'Synth layers added progressively, with filter automation to generate movement.'],
-        ['Final mix', 'Level balance between tracks and final mastering of the track.'],
+        ['Base idea', 'Initial sketch built in Logic Pro X as the foundation for the track.'],
+        ['Arrangement', 'Layers developed on top of the base to shape the full arrangement.'],
+        ['Final mix', 'Level balance and mastering of the finished track.'],
       ],
     },
     {
-      title: 'Estudio 02',
+      title: 'Sunrise (instrumental)',
       subtitle: 'Original composition',
       steps: [
-        ['Rhythmic sketch', 'Starting point in Logic Pro X with a more pronounced rhythmic base than in Estudio 01.'],
-        ['Melodic development', 'Melodic layers and countermelodies added, aiming for denser development toward the end of the track.'],
-        ['Final mix', 'Overall mix automation and mastering.'],
+        ['Base idea', 'Initial instrumental sketch built in Logic Pro X.'],
+        ['Arrangement', 'Layers developed on top of the base to shape the full arrangement.'],
+        ['Final mix', 'Level balance and mastering of the finished track.'],
       ],
     },
   ];

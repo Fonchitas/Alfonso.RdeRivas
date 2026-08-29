@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oakley Neptune — Alfonso R. de Rivas</title>
+  <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
+  <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav__logo">
+      <a href="index.html">Alfonso R. de Rivas</a>
+    </div>
+    <nav class="nav__links">
+      <div class="nav__menu" id="navMenu">
+      <div class="nav__menu-links">
+        <a href="works.html" class="is-active">Works</a>
+        <a href="archive.html">Archive</a>
+        <a href="sound.html">Sound</a>
+        <a href="info.html">Info</a>
+      </div>
+      <div class="nav__menu-foot">
+        <div class="nav__menu-foot-left">
+          <div>
+            Alfonso Rodríguez de Rivas —<br />
+            Multimedia &amp; Graphic Designer<br />
+            Based in Madrid, Spain
+          </div>
+          <div>
+            +34 620 139 947
+          </div>
+        </div>
+        <div class="nav__menu-foot-right">
+          <div>
+            <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+            <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+          <div>
+            &copy;Alfonso R. de Rivas, 2026<br />
+            Web designed and coded by me.
+          </div>
+        </div>
+      </div>
+      </div>
+      <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode"></button>
+    </nav>
+  </header>
+
+  <div class="page-fade">
+  <!-- PORTADA: lo primero que se ve al entrar al proyecto -->
+  <section class="project-cover">
+    <div class="ph-block full"><img src="img/oakley-9.png" alt="" loading="lazy" /></div>
+  </section>
+
+  <!-- Dos columnas: título grande a la izquierda, texto + ficha
+       técnica con guía de puntos a la derecha -->
+  <section class="project-intro">
+    <h1 class="project-intro__title">Oakley Neptune</h1>
+    <div class="project-intro__body">
+      <p>
+        Neptune imagines a new chapter for Oakley's Mars line — swapping
+        the heat and dust of Mars for the cold, high-pressure atmosphere
+        of Neptune. A new pair of glasses built for the cold instead of
+        the sun, as a fictional continuation of the brand's own universe.
+        <em>Design without human supervision.</em>
+      </p>
+      <span class="project-cats">Product Design · 3D</span>
+      <dl class="project-specs">
+      <div class="row"><dt>Role</dt><span class="dots"></span><dd>3D product design, art direction</dd></div>
+      <div class="row"><dt>Field</dt><span class="dots"></span><dd>Product Design · 3D</dd></div>
+      <div class="row"><dt>Client</dt><span class="dots"></span><dd>Oakley (speculative concept)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Resto de imágenes del proyecto -->
+  <section class="project-media">
+    <!-- vídeo vertical (con sonido y controles), protagonista y solo -->
+    <div class="ph-block feature media-vimeo">
+      <video src="video/oakley-vertical.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- el anuncio NEPTUNE, a ancho completo — pieza protagonista -->
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1010;"><img src="img/oakley-cover.png" alt="" loading="lazy" /></div>
+
+    <!-- la foto del producto, también a ancho completo -->
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1010;"><img src="img/oakley-2.png" alt="" loading="lazy" /></div>
+
+    <!-- pareja grande -->
+    <div class="ph-block" style="aspect-ratio: 1800 / 1008;"><img src="img/oakley-4.png" alt="" loading="lazy" /></div>
+    <div class="ph-block" style="aspect-ratio: 1800 / 1009;"><img src="img/oakley-3.png" alt="" loading="lazy" /></div>
+
+    <!-- otra pieza grande, a ancho completo -->
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1009;"><img src="img/oakley-5.png" alt="" loading="lazy" /></div>
+
+    <!-- las dos imágenes de proceso, deliberadamente pequeñas — no
+         deben pesar más que el propio proyecto -->
+    <div class="ph-block" style="aspect-ratio: 2806 / 1116;"><img src="img/oakley-10.png" alt="" loading="lazy" /></div>
+    <div class="ph-block" style="aspect-ratio: 5120 / 2880;"><img src="img/oakley-6.png" alt="" loading="lazy" /></div>
+  </section>
+
+  <section class="more">
+    <div>
+      <div class="more__label">More projects</div>
+      <a class="more__row" href="simbiosis.html" data-thumb-type="video" data-thumb="https://ik.imagekit.io/k0qx6odcz/Alfonso_Rodriguez_Spot.2%20(1).mp4">Simbiosis, <em>identity, music and 3D for a cultural mediation system.</em></a>
+      <a class="more__row" href="proyecto-anfaco.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/A1_75972-Portada-WEB.jpg">Specimen, <em>Laus Inbook 2026 award.</em></a>
+      <a class="more__row" href="proyecto-laus.html" data-thumb-type="video" data-thumb="video/outpaced-carousel.mp4">Outpaced, <em>D&amp;AD 2026 proposal for Monotype x Penguin.</em></a>
+      <a class="more__row" href="proyecto-04.html" data-thumb-type="video" data-thumb="video/primal-carousel.mp4">Primal, <em>3D modeling and animation for New Balance.</em></a>
+      <a class="more__row" href="proyecto-05.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/lcaimagenportf%20(2).jpg">La Casa Amarilla Estudio, <em>art direction, photography and branding.</em></a>
+      <a class="more__row is-current" href="proyecto-07.html" data-thumb-type="image" data-thumb="img/oakley-9.png">Oakley Neptune, <em>design without human supervision.</em></a>
+      <a class="more__row" href="proyecto-06.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png">Percepta Wines, <em>packaging and branding for a wine label concept.</em></a>
+    </div>
+    <div class="more__thumb"></div>
+  </section>
+
+  <footer class="footer">
+    <div>
+      Alfonso Rodríguez de Rivas —<br />
+      Multimedia &amp; Graphic Designer<br />
+      Based in Madrid, Spain
+    </div>
+    <div>
+      +34 620 139 947<br />
+      <a href="https://www.instagram.com/alfonso.rderivas/" target="_blank" rel="noopener">Instagram</a><br />
+      <a href="https://www.linkedin.com/in/fonchitas" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer__col--right">
+      ©Alfonso R. de Rivas, 2026<br />
+      Web designed and coded by me.
+      Typefaces: Diatype by Dinamo and Herbik by Daniel Veneklaas.
+    </div>
+  </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
