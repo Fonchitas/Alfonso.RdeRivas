@@ -214,9 +214,40 @@ document.addEventListener('click', (e) => {
 
 const carousel = document.getElementById('carousel');
 const track = document.getElementById('track');
+const mobileRows = document.getElementById('mobileRows');
+const isMobileCarousel = () => window.matchMedia('(max-width: 680px)').matches;
 
-if (carousel && track) {
-  // duplica las diapositivas una vez para el bucle infinito sin cortes
+if (mobileRows && track && isMobileCarousel()) {
+  // MÓVIL: en vez de un carrusel horizontal (poco natural con el
+  // dedo), tres franjas que se mueven solas por su cuenta, cada
+  // una en su sentido — puro CSS (@keyframes), sin necesidad de
+  // JS en cada fotograma. Aquí solo se reparten los 7 proyectos
+  // en las tres filas y se duplica cada una para que el bucle sea
+  // perfecto (la animación va de -50% a 0%, así que necesita el
+  // contenido dos veces seguidas).
+  const slides = Array.from(track.children);
+  const rows = [[], [], []];
+  slides.forEach((slide, i) => rows[i % 3].push(slide));
+
+  rows.forEach((rowSlides, i) => {
+    const row = document.createElement('div');
+    row.className = `mobile-rows__row mobile-rows__row--${i + 1}`;
+    const rowTrack = document.createElement('div');
+    rowTrack.className = 'mobile-rows__track';
+    // el contenido se repite dos veces seguidas para el bucle
+    [...rowSlides, ...rowSlides].forEach((slide) => {
+      rowTrack.appendChild(slide.cloneNode(true));
+    });
+    row.appendChild(rowTrack);
+    mobileRows.appendChild(row);
+  });
+} else if (carousel && track) {
+  // ESCRITORIO: galería continua duplicada por JS, movida con
+  // requestAnimationFrame (deriva lenta + impulso de la rueda o el
+  // arrastre). La página no hace scroll: solo se mueve esto. Los
+  // nombres aparecen al pasar el cursor.
+  // (en móvil no hace falta nada de esto: los proyectos se apilan
+  // en vertical con el scroll normal de la página, ver CSS)
   const originals = Array.from(track.children);
   originals.forEach((el) => track.appendChild(el.cloneNode(true)));
 
@@ -276,11 +307,10 @@ if (carousel && track) {
     boost = Math.max(Math.min(boost, BOOST_MAX), -BOOST_MAX);
   }, { passive: false });
 
-  // arrastre directo (ratón o dedo)
+  // arrastre directo (ratón)
   let isPressed = false;
   let dragLocked = false;
   let startX = 0, startY = 0, startXAt = 0;
-  const isMobileCarousel = () => window.matchMedia('(max-width: 680px)').matches;
 
   carousel.addEventListener('pointerdown', (e) => {
     isPressed = true;
@@ -295,20 +325,14 @@ if (carousel && track) {
     if (!isPressed) return;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    const mobile = isMobileCarousel();
 
     if (!dragLocked) {
-      // en móvil, cualquiera de los dos gestos (horizontal o
-      // vertical) activa el arrastre — no hace falta elegir uno;
-      // en escritorio se mantiene solo el horizontal, como siempre
-      const threshold = mobile
-        ? Math.abs(dx) > 6 || Math.abs(dy) > 6
-        : Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy);
+      const threshold = Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy);
       if (threshold) {
         dragLocked = true;
         dragging = true;
         carousel.classList.add('is-dragging');
-      } else if (!mobile && Math.abs(dy) > 6) {
+      } else if (Math.abs(dy) > 6) {
         isPressed = false;
         return;
       }
@@ -317,11 +341,7 @@ if (carousel && track) {
     if (dragLocked) {
       e.preventDefault();
       moved = true;
-      // mismo sentido en los dos ejes: arrastrar hacia la
-      // izquierda O deslizar el dedo de abajo arriba avanzan la
-      // galería de derecha a izquierda (comprobado con datos
-      // reales cuál de los dos signos era el correcto)
-      x = mobile ? startXAt + dx + dy : startXAt + dx;
+      x = startXAt + dx;
     }
   }, { passive: false });
 

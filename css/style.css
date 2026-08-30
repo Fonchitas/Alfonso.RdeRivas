@@ -112,7 +112,7 @@ body.page-leave .carousel {
 
 /* la home no hace scroll: es una pantalla fija con la galería
    moviéndose sola dentro */
-body.is-home { height: 100svh; height: 100dvh; overflow: hidden; }
+body.is-home { height: 100vh; height: 100svh; height: 100dvh; overflow: hidden; }
 
 /* ============================================================
    PANTALLA DE CARGA — solo en la home, solo una vez por sesión.
@@ -126,10 +126,11 @@ body.is-home { height: 100svh; height: 100dvh; overflow: hidden; }
   z-index: 999;
   display: flex;
   align-items: flex-start;
-  pointer-events: none; /* sin fondo que cubra, nunca bloquea clics */
-  transition: visibility 0.9s;
+  background: var(--bg); /* opaco de verdad: tapa lo que haya debajo mientras dura la animación */
+  pointer-events: none; /* pero sin bloquear clics: el fondo no reacciona a nada */
+  transition: visibility 0.9s, background 0.9s;
 }
-.preloader.is-hidden { visibility: hidden; }
+.preloader.is-hidden { visibility: hidden; background: transparent; }
 
 .preloader__inner {
   width: 100%;
@@ -392,6 +393,7 @@ body.preload-nav.is-ready .nav { opacity: 1; transform: none; }
    mezclar deriva automática + impulso manual sin saltos).
    ============================================================ */
 .carousel-page {
+  height: 100vh;
   height: 100svh;
   height: 100dvh;
   display: flex;
@@ -1218,7 +1220,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 680px) {
-  :root { --pad: 20px; }
+  :root { --pad: 10px; }
   .more__row { display: block; }
   .more__row::before { display: none; }
   .sound-track { grid-template-columns: 1fr; }
@@ -1409,11 +1411,69 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
     margin-bottom: 0;
     align-items: center; /* el círculo y la hamburguesa no son texto: centrados, no por línea base */
   }
-  .carousel-page { display: block; }
-  .carousel { height: 100%; margin-top: 0; }
-  /* un poco más de la mitad de la pantalla, no toda — deja aire
-     en blanco por encima (las piezas se posan pegadas abajo) */
-  .track { height: 58%; }
+
+  .carousel-page {
+    display: block;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* en vez de un único carrusel horizontal (poco natural con el
+     dedo), tres franjas apiladas que se mueven solas, cada una en
+     su sentido — nadie tiene que arrastrar nada, y aun así se nota
+     mucho más vivo que una lista quieta. Llenan toda la pantalla
+     por debajo de la barra, que queda flotando transparente encima */
+  .carousel { display: none; }
+  .mobile-rows {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .mobile-rows__row {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .mobile-rows__track {
+    display: flex;
+    height: 100%;
+    width: max-content;
+    will-change: transform;
+  }
+  .mobile-rows__row a {
+    position: relative;
+    flex: none;
+    height: 100%;
+    display: block;
+  }
+  .mobile-rows__row img,
+  .mobile-rows__row video {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+  /* fila 1 y 3 avanzan hacia la derecha, la fila 2 hacia la
+     izquierda — direcciones alternas, y cada una a su propia
+     velocidad para que nunca se sientan sincronizadas entre sí */
+  .mobile-rows__row--1 .mobile-rows__track { animation: mobileRowRight 34s linear infinite; }
+  .mobile-rows__row--2 .mobile-rows__track { animation: mobileRowLeft 26s linear infinite; }
+  .mobile-rows__row--3 .mobile-rows__track { animation: mobileRowRight 30s linear infinite; }
+  @keyframes mobileRowRight {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0%); }
+  }
+  @keyframes mobileRowLeft {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-rows__track { animation: none; }
+  }
+
 
   /* Works/Archive/Sound/Info pasan a un menú desplegable; el
      círculo de tema se queda siempre visible, fuera del menú */
