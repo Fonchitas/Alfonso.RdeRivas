@@ -226,8 +226,15 @@ if (mobileRows && track && isMobileCarousel()) {
   // perfecto (la animación va de -50% a 0%, así que necesita el
   // contenido dos veces seguidas).
   const slides = Array.from(track.children);
-  const rows = [[], [], []];
-  slides.forEach((slide, i) => rows[i % 3].push(slide));
+  // reparto explícito (no por turnos) para que, justo al entrar,
+  // la primera pieza visible de cada fila sea siempre la misma:
+  // arriba Simbiosis, en medio Primal, abajo Outpaced
+  const rowAssignment = [
+    [0, 1],    // fila de arriba: Simbiosis, Specimen
+    [2, 3],    // fila del medio: Outpaced, Primal
+    [4, 5, 6], // fila de abajo: LCA, Oakley Neptune, Percepta Wines
+  ];
+  const rows = rowAssignment.map((indices) => indices.map((i) => slides[i]));
 
   rows.forEach((rowSlides, i) => {
     const row = document.createElement('div');
