@@ -243,7 +243,7 @@ if (mobileRows && track && isMobileCarousel()) {
   // la primera pieza visible de cada fila sea siempre la misma:
   // arriba Simbiosis, en medio Primal, abajo Outpaced
   const rowAssignment = [
-    [0, 4, 1],    // fila de arriba: Simbiosis, LCA, Specimen
+    [1, 4, 0],    // fila de arriba: Specimen, LCA, Simbiosis
     [2, 3, 5, 6], // fila de abajo: Outpaced, Primal, Oakley Neptune, Percepta Wines
   ];
   const rows = rowAssignment.map((indices) => indices.map((i) => slides[i]));
@@ -555,52 +555,39 @@ if (processButtons.length && processModal) {
   const processBody = document.getElementById('processModalBody');
   const processClose = document.getElementById('processModalClose');
 
-  // contenido de ejemplo por pista — sustituir por capturas reales
-  // de Logic Pro X en cuanto estén disponibles
+  // contenido real del proceso, tomado del propio TFG (apartado 06.2.7)
   const PROCESS_DATA = [
     {
-      title: 'Deriva',
-      subtitle: 'Ambient — Simbiosis, Col.01 OLAS',
+      title: 'Olas',
+      subtitle: 'SIMBIOSIS_MAR.logicx · A major, 80 BPM, 4/4',
       steps: [
-        ['Initial session', 'Sketch of the piece in Logic Pro X: pad layers and a base texture recorded with modular synthesis, designed to accompany the visual pieces of Simbiosis.'],
-        ['Automation', 'Volume and filter automation curves so the ambience breathes alongside the video, without peaks competing with the image.'],
-        ['Final mix', 'Shared reverb bus between the layers and gentle compression on the master to keep the piece discreet and in the background.'],
+        ['Concept', 'Built around Olas, a painting by Paz Alonso: the sense of standing before something immense that brings quiet rather than anguish, the sea as both force and rest at once.'],
+        ['Field recordings', 'Real ocean recordings sit underneath the piece. Looped constantly they buried the melody, so their volume is automated to rise with each wave and fall in between, the same intermittent presence the real sea has.', ['img/olas-process-1.png']],
+        ['Low strings & pads', 'A low string bass gives the piece its weight, inspired by David García Díaz\'s score for the game RIME. Slow-attack pads (Classic Analog, Sun Glitters) build the atmosphere gradually, the way light spreads across the painting, with Ethereal Mallets adding high-frequency detail without breaking the continuity.', ['img/olas-process-2.png']],
+        ['Space', 'A wide hall reverb lets every element take its time to fade, and tempo-synced delays let notes repeat before disappearing, reinforcing the sense of something that lingers without a clear end.', ['img/olas-process-3.png', 'img/olas-process-4.png']],
       ],
     },
     {
-      title: 'Campo abierto',
-      subtitle: 'Ambient — Simbiosis, Col.02 CAMPO',
+      title: 'Campo',
+      subtitle: 'SIMBIOSIS_Rosa.logicx · C major, 68 BPM, 4/4',
       steps: [
-        ['Field recording', 'Starting point with recorded and processed textures, designed as a counterpoint to Rosa Naranjo\'s piece.'],
-        ['Harmonic layers', 'Added a harmonic bed in Logic Pro X to give melodic continuity without being intrusive.'],
-        ['Final mix', 'Equalization to make room for the video\'s vocal mid frequencies, if any, and light mastering.'],
-      ],
-    },
-    {
-      title: 'Showertime',
-      subtitle: 'Original composition',
-      steps: [
-        ['Base idea', 'Initial sketch built in Logic Pro X as the foundation for the track.'],
-        ['Arrangement', 'Layers developed on top of the base to shape the full arrangement.'],
-        ['Final mix', 'Level balance and mastering of the finished track.'],
-      ],
-    },
-    {
-      title: 'Sunrise (instrumental)',
-      subtitle: 'Original composition',
-      steps: [
-        ['Base idea', 'Initial instrumental sketch built in Logic Pro X.'],
-        ['Arrangement', 'Layers developed on top of the base to shape the full arrangement.'],
-        ['Final mix', 'Level balance and mastering of the finished track.'],
+        ['Concept', 'Built around Campo, a painting Rosa Martínez described as something born from a dream: a happy but hazy nostalgia, where things are recognisable but never quite sharp.'],
+        ['Electric piano', 'A Rhodes-style electric piano (Classic Suitcase Mk IV) carries the piece: warm, intimate and already sounding like a memory before any processing is applied.', ['img/campo-process-1.png']],
+        ['Fragmented texture', 'A Beat Breaker effect fragments and redistributes the piano in real time, so the music stutters slightly, as if the memory were repeating itself in pieces before completing.', ['img/campo-process-2.png']],
+        ['Guitar & grand piano', 'Classical guitar floats loose notes over the harmony, each one dissolved by delay before the next arrives, echoing the drifting grass in the 3D visual. A Studio Grand piano adds depth underneath, with its own distinct fragmentation pattern so the texture never feels identical.', ['img/campo-process-3.png', 'img/campo-process-4.png']],
       ],
     },
   ];
 
   function openProcess(index) {
     const data = PROCESS_DATA[index] || PROCESS_DATA[0];
-    const stepsHtml = data.steps.map(([label, text]) => `
+    const stepsHtml = data.steps.map(([label, text, images]) => `
       <div class="process-step">
-        <div class="ph-block"></div>
+        ${images && images.length ? `
+          <div class="process-step__imgs">
+            ${images.map((src) => `<img src="${src}" alt="" loading="lazy" />`).join('')}
+          </div>
+        ` : ''}
         <span class="step-num">${label}</span>
         <p>${text}</p>
       </div>

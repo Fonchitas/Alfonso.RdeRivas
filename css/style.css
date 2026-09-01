@@ -930,7 +930,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .lightbox__title {
   position: fixed;
   z-index: 10;
-  top: 5px;
+  top: 44px;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--serif);
@@ -941,7 +941,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .lightbox__close {
   position: fixed;
   z-index: 10;
-  top: 5px;
+  top: 40px;
   right: var(--pad);
   background: none;
   border: none;
@@ -965,7 +965,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .lightbox__counter {
   position: fixed;
   z-index: 10;
-  top: 5px;
+  top: 44px;
   left: var(--pad);
   font-family: var(--sans);
   font-weight: 700;
@@ -1202,6 +1202,20 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .process-modal__subtitle { opacity: 0.6; margin-bottom: 36px; }
 
 .process-step { margin-bottom: 36px; }
+.process-step__imgs {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.process-step__imgs img {
+  display: block;
+  height: auto;
+  flex: 1 1 260px;
+  min-width: 0;
+  background: var(--ph);
+}
 .process-step .ph-block {
   background: var(--ph);
   aspect-ratio: 16 / 10;
