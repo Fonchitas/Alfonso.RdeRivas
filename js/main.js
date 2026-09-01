@@ -204,12 +204,25 @@ document.addEventListener('click', (e) => {
 
 /* ---------- 2. Galería continua (home) ---------- */
 (function () {
-  const v = document.getElementById('simbiosisSlideVideo');
-  if (!v) return;
-  const startAt = 3;
-  const seek = () => { try { v.currentTime = startAt; } catch (e) { /* aún no listo */ } };
-  if (v.readyState >= 1) seek(); // metadata ya cargada
-  else v.addEventListener('loadedmetadata', seek, { once: true });
+  // cada vídeo de portada empieza un poco avanzado en vez de
+  // desde el fotograma cero — un punto de arranque distinto por
+  // vídeo, ya que no todos duran lo mismo
+  const START_TIMES = {
+    'simbiosis-hero': 3,
+    'outpaced-hero': 3,
+  };
+  const seekOne = (v) => {
+    const startAt = START_TIMES[v.dataset.video];
+    if (startAt == null) return;
+    const seek = () => { try { v.currentTime = startAt; } catch (e) { /* aún no listo */ } };
+    if (v.readyState >= 1) seek(); // metadata ya cargada
+    else v.addEventListener('loadedmetadata', seek, { once: true });
+  };
+  // aplica a los originales Y a cualquier copia que se clone
+  // después (las filas de móvil, por ejemplo) — por eso se expone
+  // la función en vez de ejecutarla una sola vez aquí mismo
+  window.seekHeroVideo = seekOne;
+  document.querySelectorAll('[data-video]').forEach(seekOne);
 })();
 
 const carousel = document.getElementById('carousel');
@@ -230,9 +243,8 @@ if (mobileRows && track && isMobileCarousel()) {
   // la primera pieza visible de cada fila sea siempre la misma:
   // arriba Simbiosis, en medio Primal, abajo Outpaced
   const rowAssignment = [
-    [0, 1],    // fila de arriba: Simbiosis, Specimen
-    [2, 3],    // fila del medio: Outpaced, Primal
-    [4, 5, 6], // fila de abajo: LCA, Oakley Neptune, Percepta Wines
+    [0, 4, 1],    // fila de arriba: Simbiosis, LCA, Specimen
+    [2, 3, 5, 6], // fila de abajo: Outpaced, Primal, Oakley Neptune, Percepta Wines
   ];
   const rows = rowAssignment.map((indices) => indices.map((i) => slides[i]));
 
@@ -243,7 +255,12 @@ if (mobileRows && track && isMobileCarousel()) {
     rowTrack.className = 'mobile-rows__track';
     // el contenido se repite dos veces seguidas para el bucle
     [...rowSlides, ...rowSlides].forEach((slide) => {
-      rowTrack.appendChild(slide.cloneNode(true));
+      const clone = slide.cloneNode(true);
+      const media = clone.querySelector('img, video');
+      if (media) media.removeAttribute('loading');
+      const heroVideo = clone.querySelector('[data-video]');
+      if (heroVideo && window.seekHeroVideo) window.seekHeroVideo(heroVideo);
+      rowTrack.appendChild(clone);
     });
     row.appendChild(rowTrack);
     mobileRows.appendChild(row);

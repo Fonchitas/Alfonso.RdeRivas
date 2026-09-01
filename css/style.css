@@ -1430,7 +1430,11 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
     display: flex;
     flex-direction: column;
     height: 100%;
+    gap: 3px; /* solo entre las dos filas — no toca los bordes de arriba ni de abajo */
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
+  body.is-ready .mobile-rows { opacity: 1; }
   .mobile-rows__row {
     flex: 1;
     overflow: hidden;
@@ -1438,10 +1442,12 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   }
   .mobile-rows__track {
     display: flex;
+    gap: 3px; /* espacio lateral entre proyectos dentro de la misma fila */
     height: 100%;
     width: max-content;
     will-change: transform;
   }
+
   .mobile-rows__row a {
     position: relative;
     flex: none;
@@ -1459,8 +1465,8 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   /* fila 1 y 3 avanzan hacia la derecha, la fila 2 hacia la
      izquierda — direcciones alternas, y cada una a su propia
      velocidad para que nunca se sientan sincronizadas entre sí */
-  .mobile-rows__row--1 .mobile-rows__track { animation: mobileRowRight 34s linear infinite; }
-  .mobile-rows__row--2 .mobile-rows__track { animation: mobileRowLeft 26s linear infinite; }
+  .mobile-rows__row--1 .mobile-rows__track { animation: mobileRowRight 74s linear infinite; animation-delay: -1s; }
+  .mobile-rows__row--2 .mobile-rows__track { animation: mobileRowLeft 96s linear infinite; animation-delay: -1s; }
   .mobile-rows__row--3 .mobile-rows__track { animation: mobileRowRight 30s linear infinite; }
   @keyframes mobileRowRight {
     from { transform: translateX(-50%); }
