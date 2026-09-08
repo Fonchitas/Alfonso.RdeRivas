@@ -227,51 +227,13 @@ document.addEventListener('click', (e) => {
 
 const carousel = document.getElementById('carousel');
 const track = document.getElementById('track');
-const mobileRows = document.getElementById('mobileRows');
-const isMobileCarousel = () => window.matchMedia('(max-width: 680px)').matches;
 
-if (mobileRows && track && isMobileCarousel()) {
-  // MÓVIL: en vez de un carrusel horizontal (poco natural con el
-  // dedo), tres franjas que se mueven solas por su cuenta, cada
-  // una en su sentido — puro CSS (@keyframes), sin necesidad de
-  // JS en cada fotograma. Aquí solo se reparten los 7 proyectos
-  // en las tres filas y se duplica cada una para que el bucle sea
-  // perfecto (la animación va de -50% a 0%, así que necesita el
-  // contenido dos veces seguidas).
-  const slides = Array.from(track.children);
-  // reparto explícito (no por turnos) para que, justo al entrar,
-  // la primera pieza visible de cada fila sea siempre la misma:
-  // arriba Simbiosis, en medio Primal, abajo Outpaced
-  const rowAssignment = [
-    [1, 4, 0],    // fila de arriba: Specimen, LCA, Simbiosis
-    [2, 3, 5, 6], // fila de abajo: Outpaced, Primal, Oakley Neptune, Percepta Wines
-  ];
-  const rows = rowAssignment.map((indices) => indices.map((i) => slides[i]));
-
-  rows.forEach((rowSlides, i) => {
-    const row = document.createElement('div');
-    row.className = `mobile-rows__row mobile-rows__row--${i + 1}`;
-    const rowTrack = document.createElement('div');
-    rowTrack.className = 'mobile-rows__track';
-    // el contenido se repite dos veces seguidas para el bucle
-    [...rowSlides, ...rowSlides].forEach((slide) => {
-      const clone = slide.cloneNode(true);
-      const media = clone.querySelector('img, video');
-      if (media) media.removeAttribute('loading');
-      const heroVideo = clone.querySelector('[data-video]');
-      if (heroVideo && window.seekHeroVideo) window.seekHeroVideo(heroVideo);
-      rowTrack.appendChild(clone);
-    });
-    row.appendChild(rowTrack);
-    mobileRows.appendChild(row);
-  });
-} else if (carousel && track) {
-  // ESCRITORIO: galería continua duplicada por JS, movida con
-  // requestAnimationFrame (deriva lenta + impulso de la rueda o el
-  // arrastre). La página no hace scroll: solo se mueve esto. Los
-  // nombres aparecen al pasar el cursor.
-  // (en móvil no hace falta nada de esto: los proyectos se apilan
-  // en vertical con el scroll normal de la página, ver CSS)
+if (carousel && track) {
+  // ÚNICO carrusel, igual en escritorio y en móvil: galería
+  // continua duplicada por JS, movida con requestAnimationFrame
+  // (deriva lenta + impulso de la rueda o el arrastre). Mismo
+  // orden y misma velocidad en los dos formatos — solo cambia,
+  // por CSS, cuánto alto ocupa en pantalla.
   const originals = Array.from(track.children);
   originals.forEach((el) => track.appendChild(el.cloneNode(true)));
 

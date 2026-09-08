@@ -6,7 +6,7 @@
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>La Casa Amarilla Estudio · Alfonso R. de Rivas</title>
+  <title>Built Not Blessed · Alfonso R. de Rivas</title>
   <link rel="preload" href="fonts/Diatype-Bold.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
@@ -58,87 +58,64 @@
   </header>
 
   <div class="page-fade">
-  <!-- PORTADA: lo primero que se ve al entrar al proyecto -->
+  <!-- PORTADA: el vídeo del caso de estudio, con sonido y controles -->
   <section class="project-cover">
-    <div class="ph-block full natural"><img src="https://ik.imagekit.io/k0qx6odcz/lcaimagenportf%20(2).jpg" alt="" /></div>
+    <div class="ph-block full media-vimeo">
+      <video src="video/ua-hero.mp4" playsinline preload="auto" muted></video>
+      <div class="media-vimeo__controls">
+        <button class="media-vimeo__toggle" aria-label="Pause video">
+          <svg class="media-vimeo__icon-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.2" height="12" /><rect x="9.8" y="2" width="3.2" height="12" /></svg>
+          <svg class="media-vimeo__icon-play" viewBox="0 0 16 16" aria-hidden="true"><polygon points="4,2.5 13,8 4,13.5" /></svg>
+        </button>
+        <div class="media-vimeo__bar"><div class="media-vimeo__fill"></div></div>
+        <button class="media-vimeo__volume" aria-label="Mute video">
+          <svg class="media-vimeo__icon-unmuted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 5.5a3 3 0 0 1 0 5" stroke="#fff" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          <svg class="media-vimeo__icon-muted" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.5L8 3v10L4.5 10H2V6z"/><path d="M10.5 6l3 4M13.5 6l-3 4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
   </section>
 
   <!-- Dos columnas: título grande a la izquierda, texto + ficha
        técnica con guía de puntos a la derecha -->
   <section class="project-intro">
-    <h1 class="project-intro__title">La Casa Amarilla Estudio</h1>
+    <h1 class="project-intro__title">Built Not Blessed</h1>
     <div class="project-intro__body">
       <p>
-        La Casa Amarilla Studio is an emerging music studio based in
-        Madrid. The project covers art direction, photography and the
-        development of the studio's visual identity.
+        The Olympics are full of moments the world calls miracles: a
+        perfect vault, a photo finish, a new world record, all filed
+        under "what luck." Public perception turns years of discipline
+        into a single lucky break, and the instant takes all the glory.
+        Built Not Blessed is a speculative Under Armour campaign for the
+        LA 2028 Games that argues the opposite: nothing here was blessed,
+        it was built.
       </p>
-      <span class="project-cats">Art Direction · Photography · Branding</span>
+      <span class="project-cats">Advertising · Campaign · Branding</span>
       <dl class="project-specs">
-      <div class="row"><dt>Role</dt><span class="dots"></span><dd>Art direction, photography and branding</dd></div>
-      <div class="row"><dt>Field</dt><span class="dots"></span><dd>Art Direction · Photography · Branding</dd></div>
-      <div class="row"><dt>Client</dt><span class="dots"></span><dd>La Casa Amarilla Studio</dd></div>
+      <div class="row"><dt>Role</dt><span class="dots"></span><dd>Creative direction, campaign concept</dd></div>
+      <div class="row"><dt>Field</dt><span class="dots"></span><dd>Advertising · Campaign · Branding</dd></div>
+      <div class="row"><dt>Collaboration</dt><span class="dots"></span><dd>Lucía Alcázar, Alba del Moral</dd></div>
+      <div class="row"><dt>Client</dt><span class="dots"></span><dd>Under Armour (speculative concept)</dd></div>
       </dl>
     </div>
   </section>
 
   <!-- Resto de imágenes del proyecto -->
   <section class="project-media">
-    <!-- maquetas de la revista -->
-    <div class="ph-block vert"><img src="img/lca-mag-1.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-mag-2.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1191;"><img src="img/ua-4.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1197;"><img src="img/ua-5.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1011;"><img src="img/ua-2.jpg" alt="" loading="lazy" /></div>
 
-    <!-- capturas del móvil: transparentes, sin recorte -->
-    <div class="ph-block full transparent" style="aspect-ratio: 2880 / 1044;"><img src="img/lca-mobile.png" alt="" /></div>
+    <div class="media-text">
+      People celebrate the final instant and ignore the years that made
+      it possible. Olympic miracles aren't blessed, they're built:
+      years of training, failure, repetition and resilience behind a
+      single moment the world calls luck.
+    </div>
 
-    <!-- sesión de fotos, en el orden exacto de sesiones que diste:
-         magicmeri/brunch/pintauñas → 20240507 (primer bloque) →
-         matt/mateo/matttttttt → isa → 20240507 (segundo bloque) →
-         vinilo → vik/20240508/mesa → isa/20240504 -->
-    <div class="ph-block third vert"><img src="img/lca-v18.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block third vert"><img src="img/lca-v13.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block third vert"><img src="img/lca-v22.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block vert"><img src="img/lca-v3.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-v4.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block vert"><img src="img/lca-v5.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-v6.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block feature"><img src="img/lca-v20.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h4.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block feature"><img src="img/lca-v21.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h3.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block feature"><img src="img/lca-v17.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h2.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block vert"><img src="img/lca-v14.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-v11.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h1.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block feature"><img src="img/lca-v9.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block vert"><img src="img/lca-v25.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-v19.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full" style="aspect-ratio: 4768 / 3168;"><img src="img/lca-v24.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h6.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block vert"><img src="img/lca-v12.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block vert"><img src="img/lca-v23.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block full"><img src="img/lca-h5.jpg" alt="" loading="lazy" /></div>
-
-    <div class="ph-block third vert"><img src="img/lca-v16.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block third vert"><img src="img/lca-v15.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block third vert"><img src="img/lca-v2.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1008;"><img src="img/ua-3.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1010;"><img src="img/ua-1.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full" style="aspect-ratio: 1800 / 1036;"><img src="img/ua-medal.jpg" alt="" loading="lazy" /></div>
   </section>
 
   <section class="more">
@@ -148,7 +125,7 @@
       <a class="more__row" href="proyecto-anfaco.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/A1_75972-Portada-WEB.jpg">Specimen, <em>Laus Inbook 2026 award.</em></a>
       <a class="more__row" href="proyecto-laus.html" data-thumb-type="video" data-thumb="video/outpaced-carousel.mp4">Outpaced, <em>D&amp;AD 2026 proposal for Monotype x Penguin.</em></a>
       <a class="more__row" href="proyecto-04.html" data-thumb-type="video" data-thumb="video/primal-carousel.mp4">Primal, <em>3D modeling and animation for New Balance.</em></a>
-      <a class="more__row is-current" href="proyecto-05.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/lcaimagenportf%20(2).jpg">La Casa Amarilla Estudio, <em>art direction, photography and branding.</em></a>
+      <a class="more__row is-current" href="proyecto-05.html" data-thumb-type="image" data-thumb="img/ua-cover.jpg">Built Not Blessed, <em>speculative Under Armour campaign for LA 2028.</em></a>
       <a class="more__row" href="proyecto-07.html" data-thumb-type="image" data-thumb="img/oakley-9.png">Oakley Neptune, <em>design without human supervision.</em></a>
       <a class="more__row" href="proyecto-06.html" data-thumb-type="image" data-thumb="https://ik.imagekit.io/k0qx6odcz/percepta_todos1.png">Percepta Wines, <em>packaging and branding for a wine label concept.</em></a>
     </div>
