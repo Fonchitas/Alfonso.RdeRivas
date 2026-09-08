@@ -297,8 +297,8 @@ if (carousel && track) {
     boost = Math.max(Math.min(boost, BOOST_MAX), -BOOST_MAX);
   }, { passive: false });
 
-  // En móvil, el gesto vertical mueve la galería hacia la derecha
-  // en ambos sentidos. Sigue al dedo y conserva inercia al soltar.
+  // En móvil: dedo hacia arriba = galería hacia la derecha;
+  // dedo hacia abajo = hacia la izquierda, con inercia al soltar.
   const gestureSurface = carousel.closest('.carousel-page');
   const mobileViewport = window.matchMedia('(max-width: 680px)');
   const TOUCH_GAIN = 1.5;
@@ -341,12 +341,13 @@ if (carousel && track) {
     e.preventDefault();
     moved = true;
     const delta = dragAxis === 'vertical'
-      ? Math.abs(e.clientY - previousY) * TOUCH_GAIN
+      ? (previousY - e.clientY) * TOUCH_GAIN
       : e.clientX - previousX;
     // Incrementos relativos: cruzar el final del bucle no produce saltos.
     x += delta;
     const dt = Math.max(e.timeStamp - previousTime, 8);
     const speed = Math.max(-BOOST_MAX, Math.min(BOOST_MAX, delta / dt));
+    if (speed * releaseSpeed < 0) releaseSpeed = 0;
     releaseSpeed = releaseSpeed * 0.25 + speed * 0.75;
     previousX = e.clientX;
     previousY = e.clientY;
@@ -649,6 +650,28 @@ if (moreRows.length && moreThumb) {
 const awards = document.getElementById('awards');
 
 if (awards) {
+  // Se reutilizan las mismas tarjetas; en escritorio/tablet vuelven
+  // a su lugar original, conservando sus enlaces y comportamiento.
+  const overview = document.getElementById('infoOverview');
+  const awardsSlot = document.createComment('Original awards position');
+  awards.before(awardsSlot);
+  const infoMobile = window.matchMedia('(max-width: 680px)');
+  function arrangeInfoMobile() {
+    if (!overview) return;
+    if (infoMobile.matches) {
+      overview.appendChild(awards);
+      // offsetTop evita que la transición de entrada altere la medida.
+      let top = 0;
+      for (let node = overview; node; node = node.offsetParent) top += node.offsetTop;
+      overview.style.setProperty('--info-overview-top', `${top}px`);
+    } else {
+      awardsSlot.after(awards);
+      overview.style.removeProperty('--info-overview-top');
+    }
+  }
+  arrangeInfoMobile();
+  window.addEventListener('resize', arrangeInfoMobile);
+  if (document.fonts) document.fonts.ready.then(arrangeInfoMobile);
   // por debajo de este ancho, el CSS ya convierte las tarjetas en
   // bloques normales dentro del flujo (ver @media en el CSS) — el
   // sistema de "fixed" + acople es cosa solo de escritorio; si se

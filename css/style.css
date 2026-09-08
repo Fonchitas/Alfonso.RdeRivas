@@ -721,6 +721,16 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 .project-media .ph-block.transparent img { width: 100%; height: auto; object-fit: contain; }
 .project-media .ph-block img,
 .project-media .ph-block video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Built Not Blessed: composición unificada solo en escritorio;
+   en móvil/tablet se conservan las dos piezas originales. */
+.project-media .ph-block.ua-lucky-pair { aspect-ratio: 1800 / 1191; }
+.ua-lucky-pair picture { display: block; width: 100%; height: 100%; }
+@media (min-width: 901px) {
+  .project-media .ph-block.ua-lucky-pair { aspect-ratio: 2048 / 679; }
+  .project-media .ua-lucky-pair img { object-fit: contain; }
+  .project-media .ua-lucky-second { display: none; }
+}
+
 /* estos tres vídeos concretos quedaban con demasiado aire dentro
    de su marco recortado — un acercamiento extra para que el
    encuadre se sienta más cerrado y con más presencia */
@@ -1341,6 +1351,25 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 @media (max-width: 680px) {
   .awards { flex-direction: column; margin-top: 70px; }
+  /* Primer pantallazo: presentación + premios, con el siguiente
+     bloque de programas asomando 48px por el borde inferior, sin cortar contenido. */
+  .studio__overview {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - var(--info-overview-top, 70px) - 48px);
+    min-height: calc(100svh - var(--info-overview-top, 70px) - 48px);
+    padding-bottom: 20px;
+  }
+  .studio__overview .awards {
+    position: static;
+    width: 100%;
+    margin: auto 0 0;
+    padding-top: 12px;
+    gap: 10px;
+  }
+  .studio__overview .award-card { flex: 0 0 auto; padding: 14px 16px; }
+  .studio__overview .award-card__title { margin: 0; max-width: none; }
+  .studio__overview .award-card__top { margin-bottom: 6px; }
   .award-card { min-width: 0; }
   .studio__photos { grid-template-columns: 1fr; padding-right: var(--pad); }
 }

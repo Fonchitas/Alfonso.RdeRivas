@@ -11,7 +11,7 @@
   <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
-  <link rel="stylesheet" href="css/style.css?v=231" />
+  <link rel="stylesheet" href="css/style.css?v=236" />
 </head>
 <body>
 
@@ -102,8 +102,13 @@
 
   <!-- Resto de imágenes del proyecto -->
   <section class="project-media">
-    <div class="ph-block full" style="aspect-ratio: 1800 / 1191;"><img src="img/ua-4.jpg" alt="" loading="lazy" /></div>
-    <div class="ph-block full" style="aspect-ratio: 1800 / 1197;"><img src="img/ua-5.jpg" alt="" loading="lazy" /></div>
+    <div class="ph-block full ua-lucky-pair">
+      <picture>
+        <source media="(min-width: 901px)" srcset="img/ua-lucky-girl-desktop.png" width="2048" height="679" />
+        <img src="img/ua-4.jpg" alt="Built Not Blessed: Lucky Girl campaign" width="1800" height="1191" loading="lazy" />
+      </picture>
+    </div>
+    <div class="ph-block full ua-lucky-second" style="aspect-ratio: 1800 / 1197;"><img src="img/ua-5.jpg" alt="" loading="lazy" /></div>
     <div class="ph-block full" style="aspect-ratio: 1800 / 1011;"><img src="img/ua-2.jpg" alt="" loading="lazy" /></div>
 
     <div class="media-text">
@@ -151,6 +156,6 @@
   </footer>
   </div>
 
-  <script src="js/main.js?v=231"></script>
+  <script src="js/main.js?v=235"></script>
 </body>
 </html>
