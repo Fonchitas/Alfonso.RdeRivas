@@ -219,7 +219,7 @@ document.addEventListener('click', (e) => {
     else v.addEventListener('loadedmetadata', seek, { once: true });
   };
   // aplica a los originales Y a cualquier copia que se clone
-  // después (las filas de móvil, por ejemplo) — por eso se expone
+  // después para el bucle continuo — por eso se expone
   // la función en vez de ejecutarla una sola vez aquí mismo
   window.seekHeroVideo = seekOne;
   document.querySelectorAll('[data-video]').forEach(seekOne);
@@ -248,7 +248,12 @@ if (carousel && track) {
   let dragging = false;
   let moved = false;
 
-  function measure() { halfWidth = track.scrollWidth / 2; }
+  function measure() {
+    // Distancia exacta entre dos copias del mismo proyecto: incluye
+    // el gap, pero no el padding inicial de la pista.
+    const firstCopy = track.children[originals.length];
+    halfWidth = firstCopy.offsetLeft - originals[0].offsetLeft;
+  }
   measure();
   window.addEventListener('resize', measure);
 
@@ -273,8 +278,7 @@ if (carousel && track) {
     }
 
     if (halfWidth > 0) {
-      if (-x >= halfWidth) x += halfWidth;
-      if (x > 0) x -= halfWidth;
+      x = -(((-x % halfWidth) + halfWidth) % halfWidth);
     }
 
     track.style.transform = `translateX(${x}px)`;
@@ -293,50 +297,77 @@ if (carousel && track) {
     boost = Math.max(Math.min(boost, BOOST_MAX), -BOOST_MAX);
   }, { passive: false });
 
-  // arrastre directo (ratón)
-  let isPressed = false;
-  let dragLocked = false;
-  let startX = 0, startY = 0, startXAt = 0;
+  // En móvil, el gesto vertical mueve la galería hacia la derecha
+  // en ambos sentidos. Sigue al dedo y conserva inercia al soltar.
+  const gestureSurface = carousel.closest('.carousel-page');
+  const mobileViewport = window.matchMedia('(max-width: 680px)');
+  const TOUCH_GAIN = 1.5;
+  let activePointer = null;
+  let dragAxis = null;
+  let mobileTouch = false;
+  let startX = 0, startY = 0;
+  let previousX = 0, previousY = 0, previousTime = 0;
+  let releaseSpeed = 0;
 
-  carousel.addEventListener('pointerdown', (e) => {
-    isPressed = true;
-    dragLocked = false;
+  gestureSurface.addEventListener('pointerdown', (e) => {
+    if (activePointer !== null || e.isPrimary === false || e.button !== 0 ||
+        document.body.classList.contains('nav-open') || e.target.closest('.nav')) return;
+    mobileTouch = e.pointerType === 'touch' && mobileViewport.matches;
+    if (!mobileTouch && !carousel.contains(e.target)) return;
+    activePointer = e.pointerId;
+    dragAxis = null;
     moved = false;
-    startX = e.clientX;
-    startY = e.clientY;
-    startXAt = x;
+    releaseSpeed = 0;
+    startX = previousX = e.clientX;
+    startY = previousY = e.clientY;
+    previousTime = e.timeStamp;
+    if (mobileTouch) boost = 0;
   });
 
   window.addEventListener('pointermove', (e) => {
-    if (!isPressed) return;
+    if (e.pointerId !== activePointer) return;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
 
-    if (!dragLocked) {
-      const threshold = Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy);
-      if (threshold) {
-        dragLocked = true;
-        dragging = true;
-        carousel.classList.add('is-dragging');
-      } else if (Math.abs(dy) > 6) {
-        isPressed = false;
-        return;
-      }
+    if (!dragAxis) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) <= 6) return;
+      if (Math.abs(dx) > Math.abs(dy)) dragAxis = 'horizontal';
+      else if (mobileTouch) dragAxis = 'vertical';
+      else { activePointer = null; return; }
+      dragging = true;
+      carousel.classList.add('is-dragging');
     }
 
-    if (dragLocked) {
-      e.preventDefault();
-      moved = true;
-      x = startXAt + dx;
-    }
+    e.preventDefault();
+    moved = true;
+    const delta = dragAxis === 'vertical'
+      ? Math.abs(e.clientY - previousY) * TOUCH_GAIN
+      : e.clientX - previousX;
+    // Incrementos relativos: cruzar el final del bucle no produce saltos.
+    x += delta;
+    const dt = Math.max(e.timeStamp - previousTime, 8);
+    const speed = Math.max(-BOOST_MAX, Math.min(BOOST_MAX, delta / dt));
+    releaseSpeed = releaseSpeed * 0.25 + speed * 0.75;
+    previousX = e.clientX;
+    previousY = e.clientY;
+    previousTime = e.timeStamp;
   }, { passive: false });
 
-  window.addEventListener('pointerup', () => {
-    isPressed = false;
-    dragLocked = false;
+  function endGesture(e) {
+    if (e.pointerId !== activePointer) return;
+    if (mobileTouch && dragAxis) {
+      // Si el dedo se ha detenido antes de soltar, también se frena la inercia.
+      const idle = Math.max(0, e.timeStamp - previousTime);
+      boost = e.type === 'pointercancel' ? 0
+        : releaseSpeed * Math.exp(-idle / 80);
+    }
+    activePointer = null;
+    dragAxis = null;
     dragging = false;
     carousel.classList.remove('is-dragging');
-  });
+  }
+  window.addEventListener('pointerup', endGesture);
+  window.addEventListener('pointercancel', endGesture);
 
   carousel.addEventListener('click', (e) => {
     if (moved) e.preventDefault();

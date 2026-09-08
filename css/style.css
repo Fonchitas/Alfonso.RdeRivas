@@ -560,6 +560,16 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 
 .project-intro__body p { margin-bottom: 1.1em; max-width: 72ch; }
+
+/* Composición de los textos largos en todos los tamaños de pantalla.
+   Los espacios inseparables del HTML protegen también la última
+   pareja de palabras en navegadores sin text-wrap: pretty. */
+.project-intro__body p,
+.project-media .media-text,
+.studio__text p {
+  text-wrap: pretty;
+}
+
 .project-intro__body .meta { margin-top: 24px; }
 .project-intro__body .tags { margin-top: 10px; margin-bottom: 24px; }
 
@@ -1382,10 +1392,6 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
      propio z-index por encima del menú (900) para quedar visible */
   .nav__logo, .nav__burger, .theme-toggle { position: relative; z-index: 950; }
 
-  /* en móvil, las piezas del carrusel se tocan entre sí, sin
-     espacio en blanco de por medio */
-  .track { gap: 0; }
-
   /* el círculo de tema no aparece en la home en móvil (el resto
      de páginas sí lo conservan) */
   body.is-home .theme-toggle { display: none; }
@@ -1435,15 +1441,31 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
     overflow: hidden;
   }
 
+  /* El gesto funciona también sobre el espacio vacío de la home.
+     Se conserva el zoom y se permite el scroll normal del menú abierto. */
+  body.is-home .carousel-page,
+  body.is-home .carousel { touch-action: pinch-zoom; }
+  body.is-home.nav-open .carousel-page { touch-action: auto; }
+
   /* el mismo carrusel único que en escritorio (mismo orden, misma
-     velocidad, mismo JS) — en móvil ocupa solo el tercio inferior
-     de la pantalla; los dos tercios de arriba quedan en blanco,
+     velocidad, mismo JS) — en móvil ocupa solo la mitad inferior
+     de la pantalla; la mitad superior queda en blanco,
      con la barra de navegación flotando encima */
-  .carousel {
-    height: 100%;
-    margin-top: 0;
+  body.is-home .carousel {
+    position: fixed;
+    inset: auto 0 0;
+    height: calc(100vh / 2);
+    height: calc(100svh / 2);
+    height: calc(100dvh / 2);
+    margin: 0;
+    background: #fff;
   }
-  .track { height: 33%; gap: 0; }
+  body.is-home .track {
+    height: 100%;
+    flex-flow: row nowrap;
+    gap: 2px;
+    padding-left: 0;
+  }
 
 
   /* Works/Archive/Sound/Info pasan a un menú desplegable; el
