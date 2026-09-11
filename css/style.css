@@ -1251,9 +1251,23 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 
 @media (max-width: 680px) {
   :root { --pad: 10px; }
-  .more__row { display: block; }
-  .more__row::before { margin-right: 6px; }
+  /* La flecha queda fuera del texto: todas las líneas comparten
+     el mismo inicio y se desplazan juntas cuando aparece. */
+  .more__row { display: block; position: relative; padding-left: 0; }
+  .more__row::before {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 1em;
+    margin-right: 0;
+  }
+  .more__row.is-current,
+  .more__row:focus-visible { padding-left: calc(1em + 6px); }
+  .more__row:focus-visible::before { opacity: 1; }
   .more__row.is-current { opacity: 0.4; }
+  @media (hover: hover) and (pointer: fine) {
+    .more__row:hover { padding-left: calc(1em + 6px); }
+  }
   .sound-track { grid-template-columns: 1fr; }
   .sound-track__head { border-right: none; border-bottom: 1px solid var(--line); }
   .sound-track__process { font-size: 9px; }

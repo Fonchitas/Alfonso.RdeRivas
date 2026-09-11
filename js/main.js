@@ -305,7 +305,7 @@ if (carousel && track) {
   requestAnimationFrame(frame);
 
   // Rueda vertical en un viewport móvil (también en emulación):
-  // scroll normal, deltaY positivo, desplaza las piezas a la derecha.
+  // scroll normal, deltaY positivo, desplaza las piezas a la izquierda.
   // El trackpad horizontal y el escritorio conservan su comportamiento.
   gestureSurface.addEventListener('wheel', (e) => {
     if (document.body.classList.contains('nav-open') || e.target.closest('.nav')) return;
@@ -314,7 +314,7 @@ if (carousel && track) {
     const vertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
     const delta = vertical ? e.deltaY : e.deltaX;
     const mobileVertical = mobileViewport.matches && vertical;
-    const impulse = delta * 0.0026 * (mobileVertical ? 1 : -1);
+    const impulse = -delta * 0.0026;
     if (mobileVertical && impulse) {
       mobileVerticalDirection = Math.sign(impulse);
       if (boost * impulse < 0) boost = 0;
@@ -322,8 +322,8 @@ if (carousel && track) {
     boost = Math.max(-BOOST_MAX, Math.min(BOOST_MAX, boost + impulse));
   }, { passive: false });
 
-  // Dedo hacia arriba = scroll normal = galería hacia la derecha.
-  // Dedo hacia abajo = volver arriba = galería hacia la izquierda.
+  // Dedo hacia arriba = scroll normal = galería hacia la izquierda.
+  // Dedo hacia abajo = volver arriba = galería hacia la derecha.
   const TOUCH_GAIN = 1.5;
   let activePointer = null;
   let dragAxis = null;
@@ -364,7 +364,7 @@ if (carousel && track) {
     e.preventDefault();
     moved = true;
     const delta = dragAxis === 'vertical'
-      ? (previousY - e.clientY) * TOUCH_GAIN
+      ? (e.clientY - previousY) * TOUCH_GAIN
       : e.clientX - previousX;
     // Incrementos relativos: cruzar el final del bucle no produce saltos.
     x += delta;
@@ -1198,9 +1198,11 @@ document.querySelectorAll('video[loop]').forEach((video) => {
   let lastY = window.scrollY;
   function positionGlass() {
     const rect = nav.getBoundingClientRect();
+    // Más recorrido del degradado en laptop, extensión discreta en móvil.
+    const extension = window.matchMedia('(max-width: 680px)').matches ? 12 : 32;
     Object.assign(glass.style, {
       top: `${rect.top}px`, left: `${rect.left}px`,
-      width: `${rect.width}px`, height: `${rect.height}px`
+      width: `${rect.width}px`, height: `${rect.height + extension}px`
     });
   }
   function onScroll() {
