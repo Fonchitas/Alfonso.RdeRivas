@@ -63,7 +63,8 @@
     const rect = nav.getBoundingClientRect();
     const navStyles = getComputedStyle(nav);
     const marginBottom = parseFloat(navStyles.marginBottom) || 0;
-    const top = rect.bottom + marginBottom;
+    const top = (window.matchMedia('(max-width: 680px)').matches
+      ? nav.offsetTop + nav.offsetHeight : rect.bottom) + marginBottom;
     document.documentElement.style.setProperty('--preloader-top', `${top}px`);
   }
 
@@ -71,26 +72,16 @@
   // referencia (100px) y escala en proporción directa
   function fitPreloaderName() {
     const nameEl = document.getElementById('preloaderName');
+    if (!nameEl) return;
     const container = nameEl.closest('.preloader__inner');
-    if (!nameEl || !container) return;
+    if (!container) return;
     nameEl.style.fontSize = '100px';
     const naturalWidth = nameEl.scrollWidth;
     if (naturalWidth <= 0) return;
-    // box-sizing es border-box: el ancho disponible para el texto
-    // es el del contenedor MENOS su propio padding lateral, no el
-    // clientWidth entero (que ya incluye ese padding)
     const styles = getComputedStyle(container);
     const paddingX = (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
-    // llena el 100% de su contenedor (que ahora es más estrecho
-    // que la pantalla, ver .preloader__inner en el CSS) — así el
-    // nombre y las palabras de abajo comparten siempre el mismo
-    // límite, en vez de que uno llegue más lejos que el otro
     const targetWidth = container.clientWidth - paddingX;
-    // sin techo artificial: en pantallas anchas el texto necesita
-    // un tamaño mayor para llegar de verdad al borde — el límite
-    // de 260px de antes era el motivo de que se quedara corto
-    const size = 100 * (targetWidth / naturalWidth);
-    nameEl.style.fontSize = `${size}px`;
+    nameEl.style.fontSize = `${100 * targetWidth / naturalWidth}px`;
   }
 
   // mide el ancho final de cada palabra y lo fija de antemano: así
@@ -139,8 +130,8 @@
       try { await document.fonts.ready; } catch (e) { /* seguir de todos modos */ }
     }
 
-    fitPreloaderName();
     positionPreloaderTop();
+    fitPreloaderName();
     freezeTaglineWidths();
     await wait(250);
     nameEl.classList.add('is-in');
@@ -176,8 +167,28 @@
     window.addEventListener('load', runPreloader);
   }
   window.addEventListener('resize', () => {
-    if (!preloader.classList.contains('is-hidden')) fitPreloaderName();
+    if (preloader.isConnected && !preloader.classList.contains('is-hidden')) {
+      positionPreloaderTop();
+      fitPreloaderName();
+    }
   });
+})();
+
+// Works: recupera exactamente la secuencia original de escritorio,
+// manteniendo el orden móvil solicitado. Se mueven nodos, no copias.
+(function () {
+  const grid = document.querySelector('.works-grid');
+  if (!grid) return;
+  const cards = new Map(Array.from(grid.children, card => [card.dataset.project, card]));
+  const mobile = window.matchMedia('(max-width: 680px)');
+  function arrangeWorks() {
+    const order = mobile.matches
+      ? ['simbiosis', 'specimen', 'outpaced', 'primal', 'percepta', 'built', 'oakley']
+      : ['simbiosis', 'primal', 'built', 'oakley', 'outpaced', 'specimen', 'percepta'];
+    order.forEach(project => grid.appendChild(cards.get(project)));
+  }
+  arrangeWorks();
+  mobile.addEventListener('change', arrangeWorks);
 })();
 
 // bandera compartida: en cuanto se empieza a salir de la página,
@@ -237,6 +248,9 @@ if (carousel && track) {
   const originals = Array.from(track.children);
   originals.forEach((el) => track.appendChild(el.cloneNode(true)));
 
+  const gestureSurface = carousel.closest('.carousel-page');
+  const mobileViewport = window.matchMedia('(max-width: 680px)');
+  let mobileVerticalDirection = -1;
   const BASE_SPEED = -0.03;   // px/ms — deriva lenta, siempre activa
   const BOOST_MAX = 3.2;      // techo de velocidad añadida
   const BOOST_DECAY = 0.92;   // cuánto se desvanece el impulso cada ~16ms
@@ -273,7 +287,11 @@ if (carousel && track) {
     lastTime = now;
 
     if (!dragging && !isLeavingPage) {
-      x += (BASE_SPEED + boost) * dt;
+      // Tras un gesto vertical móvil, la deriva conserva ese sentido
+      // cuando termina la inercia: no vuelve por sí sola a la izquierda.
+      const drift = mobileViewport.matches
+        ? Math.abs(BASE_SPEED) * mobileVerticalDirection : BASE_SPEED;
+      x += (drift + boost) * dt;
       boost *= Math.pow(BOOST_DECAY, dt / 16);
     }
 
@@ -286,21 +304,26 @@ if (carousel && track) {
   }
   requestAnimationFrame(frame);
 
-  // rueda / trackpad: añade velocidad de forma fluida, sin saltos;
-  // el impulso se integra con la deriva base y se apaga solo.
-  // Scroll hacia arriba => la galería avanza de derecha a izquierda
-  // (mismo sentido que la deriva automática), por eso se resta.
-  carousel.addEventListener('wheel', (e) => {
+  // Rueda vertical en un viewport móvil (también en emulación):
+  // scroll normal, deltaY positivo, desplaza las piezas a la derecha.
+  // El trackpad horizontal y el escritorio conservan su comportamiento.
+  gestureSurface.addEventListener('wheel', (e) => {
+    if (document.body.classList.contains('nav-open') || e.target.closest('.nav')) return;
+    if (!mobileViewport.matches && !carousel.contains(e.target)) return;
     e.preventDefault();
-    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    boost -= delta * 0.0026;
-    boost = Math.max(Math.min(boost, BOOST_MAX), -BOOST_MAX);
+    const vertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+    const delta = vertical ? e.deltaY : e.deltaX;
+    const mobileVertical = mobileViewport.matches && vertical;
+    const impulse = delta * 0.0026 * (mobileVertical ? 1 : -1);
+    if (mobileVertical && impulse) {
+      mobileVerticalDirection = Math.sign(impulse);
+      if (boost * impulse < 0) boost = 0;
+    }
+    boost = Math.max(-BOOST_MAX, Math.min(BOOST_MAX, boost + impulse));
   }, { passive: false });
 
-  // En móvil: dedo hacia arriba = galería hacia la derecha;
-  // dedo hacia abajo = hacia la izquierda, con inercia al soltar.
-  const gestureSurface = carousel.closest('.carousel-page');
-  const mobileViewport = window.matchMedia('(max-width: 680px)');
+  // Dedo hacia arriba = scroll normal = galería hacia la derecha.
+  // Dedo hacia abajo = volver arriba = galería hacia la izquierda.
   const TOUCH_GAIN = 1.5;
   let activePointer = null;
   let dragAxis = null;
@@ -345,6 +368,9 @@ if (carousel && track) {
       : e.clientX - previousX;
     // Incrementos relativos: cruzar el final del bucle no produce saltos.
     x += delta;
+    if (mobileTouch && dragAxis === 'vertical' && delta) {
+      mobileVerticalDirection = Math.sign(delta);
+    }
     const dt = Math.max(e.timeStamp - previousTime, 8);
     const speed = Math.max(-BOOST_MAX, Math.min(BOOST_MAX, delta / dt));
     if (speed * releaseSpeed < 0) releaseSpeed = 0;
@@ -1135,4 +1161,69 @@ document.querySelectorAll('video[loop]').forEach((video) => {
     }, { threshold: 0.35 });
     observer.observe(item);
   });
+})();
+
+
+/* ---------- Cristal iridiscente limitado al área de la navbar ---------- */
+(function () {
+  const nav = document.querySelector('.nav');
+  if (!nav || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const supported = CSS.supports('backdrop-filter', 'blur(2px)') ||
+    CSS.supports('-webkit-backdrop-filter', 'blur(2px)');
+  if (!supported) return;
+
+  const definitions = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  definitions.setAttribute('class', 'nav-glass-defs');
+  definitions.setAttribute('aria-hidden', 'true');
+  definitions.setAttribute('focusable', 'false');
+  definitions.innerHTML = `<defs>
+    <filter id="nav-refraction" x="-5%" y="-35%" width="110%" height="170%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.35 2" result="glass"/>
+      <feOffset in="glass" dx="3" dy="1" result="red-offset"/>
+      <feColorMatrix in="red-offset" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+      <feColorMatrix in="glass" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+      <feOffset in="glass" dx="-3" dy="-1" result="blue-offset"/>
+      <feColorMatrix in="blue-offset" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+      <feBlend in="red" in2="green" mode="screen" result="red-green"/>
+      <feBlend in="red-green" in2="blue" mode="screen"/>
+    </filter>
+  </defs>`;
+  const glass = document.createElement('div');
+  glass.className = 'nav-glass';
+  glass.setAttribute('aria-hidden', 'true');
+  document.body.append(definitions, glass);
+
+  let frame = 0;
+  let stopTimer = 0;
+  let lastY = window.scrollY;
+  function positionGlass() {
+    const rect = nav.getBoundingClientRect();
+    Object.assign(glass.style, {
+      top: `${rect.top}px`, left: `${rect.left}px`,
+      width: `${rect.width}px`, height: `${rect.height}px`
+    });
+  }
+  function onScroll() {
+    const y = window.scrollY;
+    if (y === lastY) return;
+    lastY = y;
+    clearTimeout(stopTimer);
+    if (document.body.classList.contains('nav-open') ||
+        document.body.classList.contains('is-loading') || y <= 0) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      glass.classList.remove('is-scrolling');
+      return;
+    }
+    if (!frame) frame = requestAnimationFrame(() => {
+      frame = 0;
+      positionGlass();
+      glass.classList.add('is-scrolling');
+    });
+    stopTimer = setTimeout(() => glass.classList.remove('is-scrolling'), 140);
+  }
+  positionGlass();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', positionGlass, { passive: true });
+  if (document.fonts) document.fonts.ready.then(positionGlass);
 })();

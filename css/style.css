@@ -168,7 +168,7 @@ body.is-home { height: 100vh; height: 100svh; height: 100dvh; overflow: hidden; 
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: clamp(-10px, -0.4vw, -4px);
+  margin-top: clamp(-14px, -0.55vw, -6px);
   font-family: var(--sans);
   font-weight: 700;
   font-size: clamp(11px, 1.1vw, 16px);
@@ -477,17 +477,13 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
-   WORKS — filas de 3, alineadas por la base. Cada fila es su
-   propia retícula, así que el orden es siempre exacto (nunca se
-   rompe) y las piezas conservan su proporción real dentro de la
-   fila en vez de estirarse todas a la misma altura.
+   WORKS — disposición original en columnas en escritorio;
+   una columna y orden de lectura propio en móvil.
    ============================================================ */
 .rows { padding: var(--content-top) var(--pad) 30px; }
 
-.works-grid {
-  columns: 2;
-  column-gap: 6px;
-}
+.works-grid { columns: 2; column-gap: 6px; }
+
 
 .card {
   display: inline-block;
@@ -1398,7 +1394,6 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1000px) {
-  .works-grid { columns: 2; }
   .archive-grid { columns: 5; }
   .more { grid-template-columns: 1fr; }
   .more__thumb { position: static; justify-self: start; max-width: 340px; }
@@ -1434,7 +1429,14 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   .sound-track__head { border-right: none; border-bottom: 1px solid var(--line); }
   .sound-ruler { grid-template-columns: 1fr; }
   .sound-ruler__spacer { display: none; }
-  .works-grid { columns: 1; }
+  .works-grid {
+    display: grid;
+    columns: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+  .works-grid .card { margin-bottom: 0; min-width: 0; }
+
   .archive-grid { columns: 3; }
   .project-media { grid-template-columns: 1fr; }
   .project-media .ph-block,
@@ -1596,4 +1598,57 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 
   /* con el menú abierto, la página de detrás no hace scroll */
   body.nav-open { overflow: hidden; height: 100vh; height: 100dvh; }
+}
+
+/* Entrada móvil: nombre en una línea en el espacio sobre el carrusel. */
+@media (max-width: 680px) {
+  .preloader__inner {
+    position: absolute;
+    top: var(--preloader-top, 40px);
+    padding: 0 var(--pad);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+  }
+  .preloader__name {
+    align-self: flex-start;
+    width: max-content;
+    flex: 0 0 auto;
+    line-height: 1;
+  }
+  .preloader__tagline { flex: 0 0 22px; margin-top: -2px; gap: 4px; font-size: 11px; }
+}
+
+/* Cristal de scroll: capa independiente bajo los enlaces de la nav,
+   para filtrar el contenido de fondo sin desenfocar la navegación. */
+.nav-glass {
+  position: fixed;
+  z-index: 49;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  background: linear-gradient(115deg,
+    rgba(160, 222, 255, 0.045), rgba(233, 179, 255, 0.035) 45%,
+    rgba(255, 225, 157, 0.045) 80%, transparent);
+  -webkit-backdrop-filter: blur(5px) saturate(1.3);
+  backdrop-filter: blur(5px) saturate(1.3);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 20%, rgba(0, 0, 0, 0.48) 45%, rgba(0, 0, 0, 0.16) 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.82) 20%, rgba(0, 0, 0, 0.48) 45%, rgba(0, 0, 0, 0.16) 72%, transparent 100%);
+  transition: opacity 240ms ease-out;
+}
+.nav-glass.is-scrolling { opacity: 1; transition-duration: 90ms; }
+/* Separación cromática donde se admiten filtros SVG de fondo;
+   el resto conserva el cristal suave con los matices de color. */
+@supports (backdrop-filter: url("#nav-refraction")) {
+  .nav-glass {
+    backdrop-filter: url("#nav-refraction") blur(0.9px) saturate(1.25);
+  }
+}
+.nav-glass-defs { position: fixed; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+body.nav-open .nav-glass,
+body.is-loading .nav-glass,
+body.page-leave .nav-glass { opacity: 0; transition-duration: 0ms; }
+@media (prefers-reduced-motion: reduce) {
+  .nav-glass { display: none; }
 }
