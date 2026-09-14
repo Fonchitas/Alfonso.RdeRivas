@@ -40,6 +40,11 @@
   // enlace (como el logo) sigue sin repetirla si ya se vio.
   if (!preloader || (sessionStorage.getItem('alfonso-preloaded') && !isRealReload()) || reduceMotion) {
     if (preloader) preloader.remove();
+    // sin pantalla de carga no hay margen de tiempo para que el
+    // vídeo cargue y busque su punto de arranque en silencio — así
+    // que en este caso el vídeo se queda en modo normal, ver más
+    // abajo (Galería continua)
+    window.__skipHeroVideoSeek = true;
     revealPage();
     return;
   }
@@ -223,11 +228,24 @@ document.addEventListener('click', (e) => {
     'outpaced-hero': 3,
   };
   const seekOne = (v) => {
+    // sin pantalla de carga por delante (logo -> home dentro de la
+    // misma sesión), el vídeo se queda en modo normal: desde el
+    // principio, visible ya, sin buscar ningún segundo ni esperar
+    // a ningún evento — así no hay ningún hueco que tapar
+    if (window.__skipHeroVideoSeek) {
+      v.classList.add('is-video-ready');
+      return;
+    }
     const startAt = START_TIMES[v.dataset.video];
     if (startAt == null) return;
     const seek = () => { try { v.currentTime = startAt; } catch (e) { /* aún no listo */ } };
     if (v.readyState >= 1) seek(); // metadata ya cargada
     else v.addEventListener('loadedmetadata', seek, { once: true });
+    // mientras carga se queda invisible sobre el fondo oscuro de
+    // su hueco (ver CSS) en vez de aparecer de golpe sobre el
+    // gris genérico — un solo evento basta, "playing" ya
+    // garantiza que hay un fotograma real pintado en pantalla
+    v.addEventListener('playing', () => v.classList.add('is-video-ready'), { once: true });
   };
   // aplica a los originales Y a cualquier copia que se clone
   // después para el bucle continuo — por eso se expone
@@ -246,7 +264,17 @@ if (carousel && track) {
   // orden y misma velocidad en los dos formatos — solo cambia,
   // por CSS, cuánto alto ocupa en pantalla.
   const originals = Array.from(track.children);
-  originals.forEach((el) => track.appendChild(el.cloneNode(true)));
+  originals.forEach((el) => {
+    const clone = el.cloneNode(true);
+    track.appendChild(clone);
+    // cloneNode no copia los "escuchadores" de eventos: sin esto,
+    // la copia del vídeo de portada (Simbiosis, Outpaced) se
+    // quedaría invisible para siempre, porque nunca recibiría el
+    // aviso de "ya hay un fotograma real pintado" (ver más arriba)
+    clone.querySelectorAll('[data-video]').forEach((v) => {
+      if (window.seekHeroVideo) window.seekHeroVideo(v);
+    });
+  });
 
   const gestureSurface = carousel.closest('.carousel-page');
   const mobileViewport = window.matchMedia('(max-width: 680px)');

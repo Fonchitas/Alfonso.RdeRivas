@@ -445,6 +445,24 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   display: block;
   pointer-events: none;
 }
+/* el vídeo se pasa un par de píxeles arriba y abajo de su hueco a
+   propósito: un redondeo de subpíxel puede dejar una línea muy
+   fina del fondo asomando por el borde, y así queda cubierta
+   siempre, sin depender de que el redondeo caiga bien */
+.slide video {
+  height: calc(100% + 4px);
+  margin: -2px 0;
+}
+/* el vídeo de Simbiosis abre sobre fondo negro — así el hueco de
+   carga ya se ve como algo intencional en vez de un gris plano
+   que luego pega un salto al color real */
+.slide:has(video[data-video="simbiosis-hero"]) { background: #000; }
+/* cualquier vídeo de portada con punto de arranque (ver JS) se
+   queda invisible hasta que de verdad hay un fotograma pintado en
+   pantalla — así no aparece de golpe ni se ve el primer instante
+   entrecortado mientras busca el segundo por el que debe empezar */
+video[data-video] { opacity: 0; transition: opacity 0.5s var(--ease); }
+video[data-video].is-video-ready { opacity: 1; }
 
 .slide__label {
   position: absolute;
@@ -1404,7 +1422,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1000px) {
-  .archive-grid { columns: 4; column-gap: 0; }
+  .archive-grid { columns: 3; column-gap: 0; }
   .more { grid-template-columns: 1fr; }
   .more__thumb { position: static; justify-self: start; max-width: 340px; }
   .footer { grid-template-columns: 1fr 1fr; }
