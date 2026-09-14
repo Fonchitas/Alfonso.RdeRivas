@@ -826,11 +826,10 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
 /* ============================================================
    ARCHIVE — mosaico denso, sin espaciado entre piezas, en
    columnas; cada imagen conserva su proporción real (por eso no
-   se fuerza un aspect-ratio uniforme, solo variantes de ejemplo
-   mientras son placeholders)
+   se fuerza un aspect-ratio uniforme)
    ============================================================ */
 .archive-grid {
-  columns: 8;
+  columns: 6;
   column-gap: 0;
   padding-top: var(--content-top);
 }
@@ -842,17 +841,14 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   background: var(--ph);
   cursor: pointer;
   opacity: 0;
-  transform: translateY(26px);
-  transition: filter 0.4s ease, opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  transition: filter 0.4s ease, opacity 0.6s var(--ease);
 }
-/* el JS marca cada pieza como cargada en cuanto su imagen o vídeo
-   está listo de verdad, así el fundido con leve subida sustituye
-   al "chispazo" brusco de que cada archivo remoto aparezca en un
-   instante distinto según tarde en descargarse */
+/* Fade in each ready piece without translating multicolumn fragments.
+   Intrinsic media dimensions reserve its space before loading. */
 .archive-grid__item.is-loaded { opacity: 1; transform: translateY(0); }
 @media (hover: hover) and (pointer: fine) { .archive-grid__item:hover { filter: brightness(0.94); } }
 .archive-grid__item img,
-.archive-grid__item video { width: 100%; display: block; }
+.archive-grid__item video { width: 100%; height: auto; display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   .archive-grid__item { opacity: 1 !important; transform: none !important; transition: none !important; }
@@ -1408,7 +1404,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1000px) {
-  .archive-grid { columns: 5; }
+  .archive-grid { columns: 4; column-gap: 0; }
   .more { grid-template-columns: 1fr; }
   .more__thumb { position: static; justify-self: start; max-width: 340px; }
   .footer { grid-template-columns: 1fr 1fr; }
@@ -1451,7 +1447,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
   }
   .works-grid .card { margin-bottom: 0; min-width: 0; }
 
-  .archive-grid { columns: 3; }
+  .archive-grid { columns: 2; column-gap: 0; }
   .project-media { grid-template-columns: 1fr; }
   .project-media .ph-block,
   .project-media .ph-block.full,
@@ -1503,7 +1499,7 @@ body.is-ready .carousel { opacity: 1; transform: translateY(0); }
     height: calc(100svh / 2);
     height: calc(100dvh / 2);
     margin: 0;
-    background: #fff;
+    background: var(--bg);
   }
   body.is-home .track {
     height: 100%;

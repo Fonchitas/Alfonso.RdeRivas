@@ -414,6 +414,7 @@ if (stripItems.length) {
     const media = el.querySelector('img, video');
     if (!media) { el.classList.add('is-loaded'); return; }
     const reveal = () => el.classList.add('is-loaded');
+    media.addEventListener('error', reveal, { once: true });
     if (media.tagName === 'IMG') {
       if (media.complete) reveal();
       else media.addEventListener('load', reveal, { once: true });
@@ -422,9 +423,7 @@ if (stripItems.length) {
       else media.addEventListener('loadeddata', reveal, { once: true });
     }
   });
-  // red de seguridad: si algo tarda demasiado o falla, se revela
-  // igualmente pasado un tiempo, para no dejar huecos en blanco
-  setTimeout(() => items.forEach((el) => el.classList.add('is-loaded')), 4000);
+
 
   const lightbox = document.getElementById('lightbox');
   const viewport = document.getElementById('lightboxViewport');
@@ -947,6 +946,8 @@ if (awards) {
    interfería con el cálculo de tamaño del carrusel — se descartó
    por dar más problemas de los que resolvía.) */
 document.querySelectorAll('video[loop]').forEach((video) => {
+  // Archive uses native looping: reloading resets dimensions and flashes overlays.
+  if (video.closest('.archive-grid')) return;
   video.loop = false; // el bucle pasa a estar controlado enteramente por este código
   const REWIND_MARGIN = 0.15; // segundos antes del final en los que se reinicia
 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="favicon.png?v=253" />
   <meta charset="UTF-8" />
   <script>
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
@@ -11,7 +12,7 @@
   <link rel="preload" href="fonts/Diatype-Medium.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Herbik-Regular.woff2" as="font" type="font/woff2">
   <link rel="preload" href="fonts/Herbik-Bold.woff2" as="font" type="font/woff2">
-  <link rel="stylesheet" href="css/style.css?v=246" />
+  <link rel="stylesheet" href="css/style.css?v=254" />
 </head>
 <body>
 
@@ -58,37 +59,27 @@
   </header>
 
   <div class="page-fade">
-  <!-- Mosaico denso, sin espaciado entre piezas. Los placeholders
-       usan proporciones variadas a modo de ejemplo; en cuanto
-       lleguen las imágenes reales, cada <img> impondrá su propia
-       altura natural dentro de la columna que le toque. -->
+  <!-- Intrinsic dimensions keep the mosaic stable while media loads. -->
   <div class="archive-grid">
-    <div class="archive-grid__item" data-lightbox data-title="Digital animation"><video src="https://ik.imagekit.io/k0qx6odcz/pinturaanimation2.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0609.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Brand identity"><img src="https://ik.imagekit.io/k0qx6odcz/sommarmockuplogo.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/000026.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Web design"><img src="https://ik.imagekit.io/k0qx6odcz/Captura%20de%20pantalla%202026-08-16%20a%20las%2012.25.46.png?updatedAt=1786881354246" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="3D animation"><video src="https://ik.imagekit.io/k0qx6odcz/humoliquido1.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0610.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Motion graphics"><video src="https://ik.imagekit.io/k0qx6odcz/Grabacio%CC%81n%20de%20pantalla%202025-03-13%20a%20las%2017.57.33.mov" autoplay muted loop playsinline preload="metadata"></video></div>
-    <div class="archive-grid__item" data-lightbox data-title="Editorial publication"><img src="https://ik.imagekit.io/k0qx6odcz/behance-65938d6e283c1.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Editorial · endpapers"><video src="https://ik.imagekit.io/k0qx6odcz/AlfonsoRRA_videoguardas.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-    <div class="archive-grid__item" data-lightbox data-title="Poster"><img src="https://ik.imagekit.io/k0qx6odcz/cartel%203%20atari.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Digital interface"><img src="https://ik.imagekit.io/k0qx6odcz/Captura%20de%20pantalla%202026-01-14%20a%20las%2021.05.25.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Render 3D"><img src="https://ik.imagekit.io/k0qx6odcz/Escena_escaparate_Textures.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Editorial illustration"><img src="https://ik.imagekit.io/k0qx6odcz/ilustracionalfobsor.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0599.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Cover video"><video src="https://ik.imagekit.io/k0qx6odcz/AlfonsoRRA_videoportadacon.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
-    <div class="archive-grid__item" data-lightbox data-title="Digital interface"><img src="https://ik.imagekit.io/k0qx6odcz/Captura%20de%20pantalla%202026-07-16%20a%20las%2013.17.47.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Generative texture"><img src="https://ik.imagekit.io/k0qx6odcz/3Firefly%20textura%20de%20pelota%20de%20tenis%2038312.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Digital interface"><img src="https://ik.imagekit.io/k0qx6odcz/Captura%20de%20pantalla%202026-07-16%20a%20las%2013.23.44.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0690.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Visual identity"><img src="https://ik.imagekit.io/k0qx6odcz/IWC%20propuestas%20finales_Mesa%20de%20trabajo%201%20copia%203.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0611.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Urban photography"><img src="https://ik.imagekit.io/k0qx6odcz/streetrojrosss_1.jpg" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Photography"><img src="https://ik.imagekit.io/k0qx6odcz/IMG_0608.JPG" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Product render"><img src="https://ik.imagekit.io/k0qx6odcz/hangertwo3.png" alt="" loading="lazy" /></div>
-    <div class="archive-grid__item" data-lightbox data-title="Generative composition"><img src="https://ik.imagekit.io/k0qx6odcz/Gemini_Generated_Image_upb1zxupb1zxupb1.png" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Come Out · Poster"><img width="1365" height="2048" src="img/archive/come-out.jpg" alt="Come Out exhibition poster" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Advertising campaign"><img width="1700" height="768" src="img/archive/ecofitexpanded.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="3D animation"><video width="2624" height="1476" src="https://ik.imagekit.io/k0qx6odcz/humoliquido1.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    <div class="archive-grid__item" data-lightbox data-title="Illustration"><img width="1668" height="2048" src="img/archive/illustration-blue.jpg" alt="Blue whale illustration" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Photography"><img width="2300" height="1533" src="img/archive/lca-studio.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Brand identity"><img width="972" height="778" src="https://ik.imagekit.io/k0qx6odcz/sommarmockuplogo.png" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Book design"><img width="3506" height="3506" src="img/archive/oxidoportulti2H.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Generative animation"><video width="1920" height="1080" src="img/archive/animation-01.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    <div class="archive-grid__item" data-lightbox data-title="Penny University · Packaging"><img width="2048" height="1152" src="img/archive/penny-university.jpg" alt="Penny University packaging in blue, green and pink" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Cover video"><video width="2150" height="3042" src="https://ik.imagekit.io/k0qx6odcz/AlfonsoRRA_videoportadacon.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    <div class="archive-grid__item" data-lightbox data-title="Editorial publication"><img width="3000" height="2000" src="https://ik.imagekit.io/k0qx6odcz/behance-65938d6e283c1.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Render 3D"><img width="1920" height="1080" src="https://ik.imagekit.io/k0qx6odcz/Escena_escaparate_Textures.png" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Generative texture"><img width="3640" height="2048" src="https://ik.imagekit.io/k0qx6odcz/3Firefly%20textura%20de%20pelota%20de%20tenis%2038312.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Digital animation"><video width="2240" height="1260" src="https://ik.imagekit.io/k0qx6odcz/pinturaanimation2.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    <div class="archive-grid__item" data-lightbox data-title="Visual identity"><img width="3508" height="2480" src="https://ik.imagekit.io/k0qx6odcz/IWC%20propuestas%20finales_Mesa%20de%20trabajo%201%20copia%203.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Photography"><img width="1818" height="1228" src="https://ik.imagekit.io/k0qx6odcz/000026.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Generative animation"><video width="1608" height="1080" src="img/archive/animation-02.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    <div class="archive-grid__item" data-lightbox data-title="Editorial illustration"><img width="5852" height="3524" src="https://ik.imagekit.io/k0qx6odcz/ilustracionalfobsor.jpg" alt="" loading="lazy" /></div>
+    <div class="archive-grid__item" data-lightbox data-title="Digital interface"><img width="2335" height="1206" src="https://ik.imagekit.io/k0qx6odcz/Captura%20de%20pantalla%202026-07-16%20a%20las%2013.17.47.png" alt="" loading="lazy" /></div>
     </div>
 
   <footer class="footer">
@@ -125,6 +116,6 @@
     <span class="lightbox__counter" id="lightboxCounter"></span>
   </div>
 
-  <script src="js/main.js?v=247"></script>
+  <script src="js/main.js?v=254"></script>
 </body>
 </html>
